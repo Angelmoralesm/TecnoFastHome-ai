@@ -38,7 +38,7 @@ export const api = createTRPCNext<AppRouter>({
            *
            * @see https://trpc.io/docs/data-transformers
            */
-          transformer: superjson,
+          transformer: superjson as any,
           url: `${getBaseUrl()}/api/trpc`,
         }),
       ],
@@ -50,7 +50,7 @@ export const api = createTRPCNext<AppRouter>({
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
   ssr: false,
-  transformer: superjson,
+  transformer: superjson as any,
 });
 
 /**

@@ -1,29 +1,204 @@
-# Create T3 App
+# TecnoFast IA - Plataforma de Monitoreo de Seguridad
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## 🏗️ Descripción del Proyecto
 
-## What's next? How do I make an app with this?
+**TecnoFast IA** es una plataforma de monitoreo inteligente diseñada para la empresa TecnoFast, especializada en la fabricación de casas prefabricadas de alto estándar. La plataforma implementa inteligencia artificial en tiempo real para detectar riesgos durante el trabajo interno de preparación de materiales y piezas de las casas.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### 🎯 Objetivo Principal
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+Nuestro objetivo es garantizar el cumplimiento de las reglas de seguridad durante las horas de trabajo y mejorar la eficiencia operativa mediante:
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- **Monitoreo en tiempo real** de las cámaras de los trabajadores
+- **Análisis de IA** para detectar violaciones de estándares de seguridad
+- **Dashboard principal** con acceso a cámaras en vivo
+- **Detección automática** de riesgos y comportamientos inseguros
+- **Reportes y alertas** en tiempo real para supervisores
 
-## Learn More
+## 🚀 Características Principales
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- **🔒 Sistema de Autenticación** - Login seguro para supervisores y administradores
+- **📹 Monitoreo de Cámaras** - Acceso en vivo a las cámaras de trabajo
+- **🤖 Inteligencia Artificial** - Análisis automático de comportamientos y riesgos
+- **📊 Dashboard Intuitivo** - Interfaz moderna y fácil de usar
+- **⚡ Tiempo Real** - Alertas y notificaciones instantáneas
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## 🛠️ Tecnologías Utilizadas
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- **Frontend:** Next.js 14 + TypeScript
+- **UI Framework:** Mantine UI v7
+- **Estilos:** CSS Modules + PostCSS
+- **Fuentes:** Google Fonts (Montserrat)
+- **Iconos:** Tabler Icons
+- **Base de Datos:** Prisma + SQLite
+- **API:** tRPC para comunicación cliente-servidor
+- **Autenticación:** Sistema personalizado (a implementar)
 
-## How do I deploy this?
+## 📋 Prerrequisitos
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Antes de comenzar, asegúrate de tener instalado:
+
+- **Node.js** (versión 18.17 o superior)
+- **npm** o **yarn**
+- **Git**
+
+## 🚀 Instalación y Configuración
+
+### 1. Clonar el Repositorio
+
+```bash
+git clone <url-del-repositorio>
+cd tecnohome-ai
+```
+
+### 2. Instalar Dependencias
+
+```bash
+npm install
+# o
+yarn install
+```
+
+### 3. Configurar Variables de Entorno
+
+Crea un archivo `.env.local` en la raíz del proyecto:
+
+```env
+# Base de datos
+DATABASE_URL="file:./dev.db"
+
+# Configuración de la aplicación
+NEXTAUTH_SECRET="tu-secreto-aqui"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Configuración de IA (futuro)
+AI_API_KEY="tu-api-key-de-ia"
+AI_ENDPOINT="https://api.ia-service.com"
+```
+
+### 4. Configurar la Base de Datos
+
+```bash
+# Generar el cliente de Prisma
+npx prisma generate
+
+# Ejecutar las migraciones
+npx prisma migrate dev
+
+# (Opcional) Abrir el explorador de Prisma
+npx prisma studio
+```
+
+### 5. Ejecutar la Aplicación
+
+```bash
+# Modo desarrollo
+npm run dev
+# o
+yarn dev
+
+# Modo producción
+npm run build
+npm start
+```
+
+## 📁 Estructura del Proyecto
+
+```
+tecnohome-ai/
+├── prisma/                 # Esquema y migraciones de base de datos
+├── public/                 # Archivos estáticos (imágenes, favicon)
+├── src/
+│   ├── pages/             # Páginas de Next.js
+│   │   ├── api/           # API routes
+│   │   └── index.tsx      # Página de login
+│   ├── server/            # Lógica del servidor
+│   │   ├── api/           # Routers de tRPC
+│   │   └── db.ts          # Configuración de base de datos
+│   ├── styles/            # Estilos globales
+│   ├── theme/             # Configuración del tema de Mantine
+│   └── utils/             # Utilidades y helpers
+├── .env.local             # Variables de entorno (crear)
+├── next.config.js         # Configuración de Next.js
+├── package.json           # Dependencias del proyecto
+└── tsconfig.json          # Configuración de TypeScript
+```
+
+## 🔧 Scripts Disponibles
+
+```bash
+# Desarrollo
+npm run dev          # Inicia el servidor de desarrollo
+npm run build        # Construye la aplicación para producción
+npm run start        # Inicia la aplicación en modo producción
+
+# Base de datos
+npm run db:generate  # Genera el cliente de Prisma
+npm run db:migrate   # Ejecuta las migraciones
+npm run db:studio    # Abre el explorador de Prisma
+
+# Linting y formateo
+npm run lint         # Ejecuta ESLint
+npm run format       # Formatea el código con Prettier
+```
+
+## 🎨 Personalización del Tema
+
+La aplicación utiliza Mantine UI con un tema personalizado. Puedes modificar los colores y estilos en:
+
+```
+src/theme/mantine-theme.ts
+```
+
+### Colores Principales de TecnoFast:
+- **Primario:** #dc2626 (Rojo)
+- **Secundario:** #374151 (Gris oscuro)
+- **Acento:** #6b7280 (Gris medio)
+
+## 🔐 Sistema de Autenticación
+
+**Estado Actual:** Interfaz de login implementada
+**Pendiente:** Lógica de autenticación y autorización
+
+### Usuarios del Sistema:
+- **Supervisores:** Acceso a cámaras y monitoreo
+- **Administradores:** Gestión completa del sistema
+- **Técnicos:** Mantenimiento y configuración
+
+
+## 🤝 Contribución
+
+### Guías de Desarrollo
+
+1. **pull** el repositorio
+2. **Crea** una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. **Commit** tus cambios (`git commit -am 'Agrega nueva funcionalidad'`)
+4. **Push** a la rama (`git push origin feature/nueva-funcionalidad`)
+5. **Crea** un Pull Request o push a main
+
+### Estándares de Código
+
+- Usa **TypeScript** para todo el código
+- Sigue las **convenciones de Next.js**
+- Documenta **APIs** y componentes complejos
+
+## 🐛 Solución de Problemas
+
+### Problemas Comunes
+
+**Error de base de datos:**
+```bash
+npx prisma generate
+npx prisma migrate reset
+```
+
+**Error de dependencias:**
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**Error de build:**
+```bash
+npm run build
+# Revisar errores de TypeScript
+```

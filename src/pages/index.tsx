@@ -193,6 +193,7 @@ export default function Home() {
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = 'none';
                   }}
+                  onClick={() => window.location.href = '/dashboard'}
                 >
                   Acceder al Sistema
                 </Button>
@@ -331,8 +332,8 @@ export default function Home() {
                     e.currentTarget.style.fontWeight = '600';
                   }}>
                     Cámaras en Vivo
-                  </Text>
-                </Stack>
+                    </Text>
+                  </Stack>
 
                 <Stack align="center" gap="sm">
                   <Box
@@ -375,8 +376,8 @@ export default function Home() {
                     e.currentTarget.style.fontWeight = '600';
                   }}>
                     Seguridad IA
-                  </Text>
-                </Stack>
+                    </Text>
+                  </Stack>
 
                 <Stack align="center" gap="sm">
                   <Box
@@ -419,8 +420,8 @@ export default function Home() {
                     e.currentTarget.style.fontWeight = '600';
                   }}>
                     Detección de Riesgos
-                  </Text>
-                </Stack>
+                    </Text>
+                  </Stack>
               </Group>
 
               {/* Caja de características */}
@@ -448,7 +449,7 @@ export default function Home() {
                   e.currentTarget.style.borderColor = '#dc2626';
                 }}
               >
-                <Stack gap="sm">
+              <Stack gap="sm">
                   <Group justify="space-between" align="center">
                     <Badge 
                       size="md" 
@@ -490,11 +491,11 @@ export default function Home() {
                     fontFamily: 'Montserrat, sans-serif'
                   }}>
                     Sistema de IA que analiza en tiempo real el cumplimiento de estándares de seguridad.
-                  </Text>
-                </Stack>
+                </Text>
+              </Stack>
               </Paper>
-            </Stack>
-          </Container>
+          </Stack>
+        </Container>
         </Box>
       </main>
     </>
