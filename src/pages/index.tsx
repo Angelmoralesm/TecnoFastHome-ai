@@ -70,7 +70,7 @@ export default function Home() {
                   fontSize: '1.1rem',
                   fontFamily: 'Montserrat, sans-serif'
                 }}>
-                  Plataforma de monitoreo inteligente para garantizar seguridad y eficiencia.
+                  Plataforma de monitoreo inteligente para garantizar seguridad y eficiencia. PANCHO CHUPALO
                 </Text>
               </Stack>
 
