@@ -38,6 +38,9 @@ import Image from 'next/image';
 import { mockCameras, mockAlerts, mockDashboardStats } from '../data/mockData';
 import { CameraCard } from '../components/CameraCard';
 import { AlertItem } from '../components/AlertItem';
+import YOLOv8ObjectDetection from '~/components/YOLOv8ObjectDetection';
+import ObjectDetector from '~/components/ObjectDetector';
+import VideoFeed from '~/components/VideoFeed';
 
 export default function Dashboard() {
   const [selectedCamera, setSelectedCamera] = useState<number | null>(null);
@@ -880,14 +883,7 @@ export default function Dashboard() {
               >
                 <IconVideo size={56} color="#64748b" />
               </Box>
-              <div style={{ textAlign: 'center' }}>
-                <Text size="xl" fw={600} style={{ fontFamily: 'Montserrat, sans-serif', color: '#1e293b', marginBottom: '8px' }}>
-                  Vista previa de la cámara
-                </Text>
-                <Text size="md" style={{ fontFamily: 'Montserrat, sans-serif', color: '#64748b', maxWidth: '400px', lineHeight: '1.5' }}>
-                  El video en vivo se mostrará aquí cuando se implemente la funcionalidad de streaming
-                </Text>
-              </div>
+              <VideoFeed/>
             </Stack>
           </Box>
 

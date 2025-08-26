@@ -7,11 +7,9 @@ import {
   Stack, 
   Title, 
   Container,
-  Grid,
   TextInput,
   ActionIcon,
   Box,
-  Avatar,
   Badge,
   Paper
 } from '@mantine/core';
@@ -70,7 +68,7 @@ export default function Home() {
                   fontSize: '1.1rem',
                   fontFamily: 'Montserrat, sans-serif'
                 }}>
-                  Plataforma de monitoreo inteligente para garantizar seguridad y eficiencia. PANCHO CHUPALO
+                  Plataforma de monitoreo inteligente para garantizar seguridad y eficiencia.
                 </Text>
               </Stack>
 
