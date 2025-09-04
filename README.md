@@ -6,17 +6,45 @@
 📖 **[Lee la guía completa aquí](README_USUARIO.md)**
 
 ### Scripts de Automatización:
+
+#### Scripts Recomendados (Compatible con todos los Windows):
+- **`iniciar_sistema_compat.bat`** ⭐⭐⭐ - Configuración completa compatible
+- **`iniciar_rapido_compat.bat`** ⭐⭐⭐ - Inicio rápido compatible
+
+#### Scripts Originales (Pueden tener problemas de compatibilidad):
 - **`iniciar_sistema.bat`** - Configuración completa (primera vez)
 - **`iniciar_sistema_v2.bat`** - Versión mejorada con máxima compatibilidad
 - **`iniciar_rapido.bat`** - Inicio rápido (después de la primera instalación)
 - **`verificar_sistema.bat`** - Verificación del estado del sistema
 - **`inicio_minimal.bat`** - Script minimalista (último recurso)
 
-📖 **[Guía completa para usuarios](README_USUARIO.md)**  
-📋 **[Instrucciones técnicas detalladas](INSTRUCCIONES_INICIO.md)**  
+📖 **[Guía completa para usuarios](README_USUARIO.md)**
+📋 **[Instrucciones técnicas detalladas](INSTRUCCIONES_INICIO.md)**
 🛠️ **[Solución a cierres automáticos](SOLUCION_CIERRES.md)**
+⚠️ **[Problemas de compatibilidad en otras PCs](PROBLEMA_COMPATIBILIDAD.md)**
 
-## ⚠️ Importante: Si los scripts se cierran automáticamente
+## ⚠️ Importante: Problemas de Compatibilidad
+
+### Si ves errores como "no se reconoce como comando" o caracteres extraños:
+
+**SOLUCIÓN INMEDIATA:** Usa los scripts compatibles
+```cmd
+# En lugar de iniciar_sistema.bat, usa:
+iniciar_sistema_compat.bat
+
+# En lugar de iniciar_rapido.bat, usa:
+iniciar_rapido_compat.bat
+```
+
+**Causas del problema:**
+- Caracteres especiales (emojis, acentos) no compatibles
+- Codificación UTF-8 sin BOM
+- Diferentes versiones de Windows
+- Configuraciones regionales diferentes
+
+**Scripts compatibles:** Eliminan todos los caracteres problemáticos y usan codificación simple.
+
+### Si los scripts se cierran automáticamente:
 
 **Lee esta guía:** [SOLUCION_CIERRES.md](SOLUCION_CIERRES.md)
 
