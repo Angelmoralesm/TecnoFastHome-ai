@@ -14,7 +14,8 @@ export const mockCameras: Camera[] = [
     description: 'Monitoreo continuo para detección temprana de incendios y chispas en el área de soldadura. Utiliza algoritmos de IA para identificar patrones de fuego y humo.',
     ipAddress: '192.168.1.101',
     port: 554,
-    streamUrl: 'rtsp://192.168.1.101:554/stream1'
+    streamUrl: 'rtsp://192.168.1.101:554/stream1',
+    aiServerPort: 5000
   },
   {
     id: 2,
@@ -28,7 +29,8 @@ export const mockCameras: Camera[] = [
     description: 'Verificación automática del uso correcto de EPP (Equipos de Protección Personal) y equipos de seguridad. Detecta ausencia de cascos, guantes, chalecos y otros elementos de protección.',
     ipAddress: '192.168.1.102',
     port: 554,
-    streamUrl: 'rtsp://192.168.1.102:554/stream1'
+    streamUrl: 'rtsp://192.168.1.102:554/stream1',
+    aiServerPort: 5001
   }
 ];
 

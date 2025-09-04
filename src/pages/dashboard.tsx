@@ -60,10 +60,16 @@ export default function Dashboard() {
     close();
   };
 
+  // Función para determinar el puerto del servidor Python según la cámara
+  const getCameraPort = (cameraId: number): number => {
+    const camera = cameras.find(c => c.id === cameraId);
+    return camera?.aiServerPort || 5000; // Usar el puerto configurado o 5000 por defecto
+  };
+
   return (
     <>
       <Head>
-        <title>TecnoFast IA - Dashboard de Monitoreo</title>
+        <title>Dashboard de Monitoreo</title>
         <meta name="description" content="Dashboard principal de monitoreo de seguridad con IA" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -99,15 +105,7 @@ export default function Dashboard() {
               justifyContent: 'space-between'
             }}
           >
-            {!sidebarCollapsed && (
-              <Image 
-                src="/tfhome.png" 
-                alt="TecnoFast Logo" 
-                width={120} 
-                height={40}
-                style={{ objectFit: 'contain' }}
-              />
-            )}
+            
             <ActionIcon
               variant="subtle"
               size="md"
@@ -261,7 +259,7 @@ export default function Dashboard() {
                     e.currentTarget.style.color = '#64748b';
                   }}
                 >
-                  {!sidebarCollapsed && 'Usuario TecnoFast'}
+                  {!sidebarCollapsed && 'Usuario'}
                 </Button>
               </Menu.Target>
 
@@ -284,7 +282,7 @@ export default function Dashboard() {
                   }}
                 >
                   <Text size="sm" fw={700} style={{ fontFamily: 'Montserrat, sans-serif', color: '#1e293b' }}>
-                    Usuario TecnoFast
+                    Usuario
                   </Text>
                   <Text size="xs" style={{ fontFamily: 'Montserrat, sans-serif', color: '#64748b', fontWeight: '500' }}>
                     Supervisor del Sistema
@@ -882,8 +880,9 @@ export default function Dashboard() {
                 }}
               >
                 <IconVideo size={56} color="#64748b" />
+                <VideoFeed port={selectedCamera ? getCameraPort(selectedCamera) : 5000}/>
               </Box>
-              <VideoFeed/>
+              
             </Stack>
           </Box>
 

@@ -24,8 +24,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>TecnoFast - Monitoreo de Seguridad IA</title>
-        <meta name="description" content="Plataforma de monitoreo de seguridad con IA para TecnoFast - Casas Prefabricadas" />
+        <title>Monitoreo de Seguridad IA</title>
+        <meta name="description" content="Plataforma de monitoreo de seguridad con IA" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -47,19 +47,13 @@ export default function Home() {
             <Stack gap="lg">
               {/* Logo y branding */}
               <Stack gap="sm" align="center">
-                <Image 
-                  src="/tfhome.png" 
-                  alt="TecnoFast Logo" 
-                  width={120} 
-                  height={60}
-                />
                 <Title order={2} size="h2" style={{ 
                   fontSize: '1.5rem', 
                   fontWeight: '700',
                   color: '#374151',
                   fontFamily: 'Montserrat, sans-serif'
                 }}>
-                  Bienvenido a TecnoFast IA
+                  Bienvenido a la plataforma de monitoreo IA
                 </Title>
                 <Text size="md" c="dimmed" ta="center" style={{ 
                   maxWidth: '350px',
@@ -68,7 +62,7 @@ export default function Home() {
                   fontSize: '1.1rem',
                   fontFamily: 'Montserrat, sans-serif'
                 }}>
-                  Plataforma de monitoreo inteligente para garantizar seguridad y eficiencia.
+                  Plataforma de monitoreo inteligente para garantizar seguridad y eficiencia en el trabajo.
                 </Text>
               </Stack>
 

@@ -2,8 +2,12 @@
 
 import React from 'react';
 
-const VideoFeed: React.FC = () => {
-  const serverUrl = "http://localhost:5000/video_feed";
+interface VideoFeedProps {
+  port?: number;
+}
+
+const VideoFeed: React.FC<VideoFeedProps> = ({ port = 5000 }) => {
+  const serverUrl = `http://localhost:${port}/video_feed`;
 
   return (
     <div style={{

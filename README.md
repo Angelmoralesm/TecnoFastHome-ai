@@ -1,5 +1,18 @@
 # TecnoFast IA - Plataforma de Monitoreo de Seguridad
 
+## ⚡ Inicio Rápido
+
+### Para Usuarios sin Conocimientos Técnicos:
+📖 **[Lee la guía completa aquí](README_USUARIO.md)**
+
+### Scripts de Automatización:
+- **`iniciar_sistema.bat`** - Configuración completa (primera vez)
+- **`iniciar_rapido.bat`** - Inicio rápido (después de la primera instalación)
+
+📋 **[Instrucciones detalladas aquí](INSTRUCCIONES_INICIO.md)**
+
+---
+
 ## 🏗️ Descripción del Proyecto
 
 **TecnoFast IA** es una plataforma de monitoreo inteligente diseñada para la empresa TecnoFast, especializada en la fabricación de casas prefabricadas de alto estándar. La plataforma implementa inteligencia artificial en tiempo real para detectar riesgos durante el trabajo interno de preparación de materiales y piezas de las casas.

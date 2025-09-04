@@ -1,6 +1,6 @@
 # app.py
 
-import cv2, os, time
+import cv2, os, time, sys
 import numpy as np
 import onnxruntime as ort
 from flask import Flask, Response
@@ -8,7 +8,7 @@ from flask import Flask, Response
 # ======================
 # CONFIG BÁSICA
 # ======================
-MODEL_PATH     = "public/best2.onnx"
+MODEL_PATH     = "best2.onnx"
 IMG_SIZE       = 640
 
 # sensibilidad / NMS0
@@ -182,13 +182,9 @@ except Exception as e:
     print(f"[ERROR] No se pudo cargar el modelo ONNX: {e}")
     sess = None
 
-# Elegir la cámara al iniciar el servidor
-try:
-    CAM_INDEX = choose_camera()
-    print(f"[INFO] Usando cámara #{CAM_INDEX}")
-except RuntimeError as e:
-    print(f"[ERROR] {e}")
-    CAM_INDEX = None
+# Usar la cámara con índice 0 (por defecto)
+CAM_INDEX = 0
+print(f"[INFO] Usando cámara #{CAM_INDEX} (configurada por defecto)")
 
 def generate_frames():
     if CAM_INDEX is None or sess is None:
@@ -256,4 +252,13 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000', threaded=True)
+    # Configurar puerto desde argumentos de línea de comandos
+    port = 5000  # Puerto por defecto
+    if len(sys.argv) > 1 and sys.argv[1] == '--port':
+        try:
+            port = int(sys.argv[2])
+        except (IndexError, ValueError):
+            print(f"[ERROR] Puerto inválido. Usando puerto por defecto: {port}")
+
+    print(f"[INFO] Iniciando servidor en puerto {port}")
+    app.run(host='0.0.0.0', port=port, threaded=True)

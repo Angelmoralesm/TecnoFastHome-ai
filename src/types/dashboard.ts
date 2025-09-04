@@ -12,6 +12,7 @@ export interface Camera {
   ipAddress?: string;
   port?: number;
   streamUrl?: string;
+  aiServerPort?: number; // Puerto del servidor Python para procesamiento de IA
 }
 
 // Tipos para las alertas del sistema
