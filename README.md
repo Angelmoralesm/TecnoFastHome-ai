@@ -7,9 +7,30 @@
 
 ### Scripts de Automatización:
 - **`iniciar_sistema.bat`** - Configuración completa (primera vez)
+- **`iniciar_sistema_v2.bat`** - Versión mejorada con máxima compatibilidad
 - **`iniciar_rapido.bat`** - Inicio rápido (después de la primera instalación)
+- **`verificar_sistema.bat`** - Verificación del estado del sistema
+- **`inicio_minimal.bat`** - Script minimalista (último recurso)
 
-📋 **[Instrucciones detalladas aquí](INSTRUCCIONES_INICIO.md)**
+📖 **[Guía completa para usuarios](README_USUARIO.md)**  
+📋 **[Instrucciones técnicas detalladas](INSTRUCCIONES_INICIO.md)**  
+🛠️ **[Solución a cierres automáticos](SOLUCION_CIERRES.md)**
+
+## ⚠️ Importante: Si los scripts se cierran automáticamente
+
+**Lee esta guía:** [SOLUCION_CIERRES.md](SOLUCION_CIERRES.md)
+
+**Causas comunes:**
+- Ejecutar desde ubicación incorrecta
+- Presionar Ctrl+C accidentalmente
+- Falta de permisos de administrador
+- Versiones antiguas de Windows
+
+**Solución rápida:**
+1. Abre CMD como **Administrador**
+2. Ve a la carpeta del proyecto: `cd C:\ruta\a\tu\proyecto`
+3. Ejecuta: `verificar_sistema.bat`
+4. Sigue las instrucciones que aparecen
 
 ---
 

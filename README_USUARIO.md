@@ -72,6 +72,24 @@ start_servers.bat
 
 ## ⚠️ Solución de Problemas
 
+### "La ventana se cierra automáticamente"
+**Este es el problema más común.** Si el script se cierra sin que puedas ver nada:
+
+1. **Ejecuta como Administrador:**
+   - Clic derecho en `iniciar_sistema.bat`
+   - Seleccionar "Ejecutar como administrador"
+
+2. **Verifica la ubicación:**
+   - Asegúrate de estar en la carpeta correcta
+   - Debe contener: `package.json`, `public/`, `src/`
+
+3. **Ejecuta primero la verificación:**
+   ```cmd
+   verificar_sistema.bat
+   ```
+
+4. **Lee los mensajes de error** que aparecen
+
 ### "Python no se reconoce"
 - Reinicia tu computadora
 - Vuelve a instalar Python con la opción "Add to PATH"
