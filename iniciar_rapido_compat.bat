@@ -46,14 +46,14 @@ if not exist "public\main.py" (
     echo [OK] main.py encontrado
 )
 
-if not exist "public\EPP.py" (
-    echo ERROR: No se encuentra EPP.py
+if not exist "public\glasses.py" (
+    echo ERROR: No se encuentra glasses.py
     echo.
     echo Ejecuta primero 'iniciar_sistema_compat.bat'
     pause
     exit /b 1
 ) else (
-    echo [OK] EPP.py encontrado
+    echo [OK] glasses.py encontrado
 )
 
 REM Verificar que Python este disponible
@@ -96,8 +96,8 @@ echo Iniciando servidor de deteccion de incendios...
 start "Servidor de Fuego - Puerto 5000" %PYTHON_CMD% main.py --port 5000
 timeout /t 2 /nobreak >nul
 
-echo Iniciando servidor de deteccion de EPP...
-start "Servidor de EPP - Puerto 5001" %PYTHON_CMD% EPP.py --port 5001
+REM Iniciando servidor de deteccion de lentes...
+start "Servidor de Lentes - Puerto 5001" %PYTHON_CMD% glasses.py --port 5001
 
 echo.
 echo [OK] Servidores iniciados correctamente
@@ -133,7 +133,7 @@ echo      SISTEMA LISTO
 echo ================================================
 echo.
 echo [OK] Servidor de Incendios: http://localhost:5000/video_feed
-echo [OK] Servidor de EPP: http://localhost:5001/video_feed
+echo [OK] Servidor de Lentes: http://localhost:5001/video_feed
 echo [OK] Dashboard: http://localhost:3000
 echo.
 echo INSTRUCCIONES:
