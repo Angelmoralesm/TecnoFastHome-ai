@@ -1,0 +1,61 @@
+2025/10/14-22:04:23.502 4c0c Reusing MANIFEST C:\Things\CODE\TecnoHome\tecnohome-ai\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/10/14-22:04:23.503 4c0c Recovering log #634
+2025/10/14-22:04:23.524 4c0c Reusing old log C:\Things\CODE\TecnoHome\tecnohome-ai\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000634.log 
+2025/10/14-22:04:24.953 8e2c Level-0 table #644: started
+2025/10/14-22:04:24.957 8e2c Level-0 table #644: 240424 bytes OK
+2025/10/14-22:04:24.958 8e2c Delete type=0 #634
+2025/10/14-22:04:24.958 8e2c Manual compaction at level-0 from '\x00!\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00"\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/10/14-22:04:26.125 8090 Compacting 1@1 + 6@2 files
+2025/10/14-22:04:26.194 8090 Generated table #645@1: 86553 keys, 2236721 bytes
+2025/10/14-22:04:26.271 8090 Generated table #646@1: 99189 keys, 2251147 bytes
+2025/10/14-22:04:26.358 8090 Generated table #647@1: 45206 keys, 2348950 bytes
+2025/10/14-22:04:26.427 8090 Generated table #648@1: 23130 keys, 2204419 bytes
+2025/10/14-22:04:26.517 8090 Generated table #649@1: 32997 keys, 2215489 bytes
+2025/10/14-22:04:26.554 8090 Generated table #650@1: 31284 keys, 631267 bytes
+2025/10/14-22:04:26.554 8090 Compacted 1@1 + 6@2 files => 11887993 bytes
+2025/10/14-22:04:26.554 8090 compacted to: files[ 0 0 6 0 0 0 0 ]
+2025/10/14-22:04:26.554 8090 Delete type=2 #636
+2025/10/14-22:04:26.554 8090 Delete type=2 #637
+2025/10/14-22:04:26.555 8090 Delete type=2 #638
+2025/10/14-22:04:26.555 8090 Delete type=2 #639
+2025/10/14-22:04:26.555 8090 Delete type=2 #640
+2025/10/14-22:04:26.555 8090 Delete type=2 #641
+2025/10/14-22:04:26.555 8090 Delete type=2 #644
+2025/10/14-22:04:43.059 8f94 Level-0 table #652: started
+2025/10/14-22:04:43.101 8f94 Level-0 table #652: 1199642 bytes OK
+2025/10/14-22:04:43.103 8f94 Delete type=0 #643
+2025/10/14-22:04:43.221 559c Compacting 1@1 + 6@2 files
+2025/10/14-22:04:43.336 559c Generated table #653@1: 87458 keys, 2238430 bytes
+2025/10/14-22:04:43.410 559c Generated table #654@1: 99053 keys, 2251733 bytes
+2025/10/14-22:04:43.469 559c Generated table #655@1: 49623 keys, 2352397 bytes
+2025/10/14-22:04:43.504 559c Generated table #656@1: 22056 keys, 2206169 bytes
+2025/10/14-22:04:43.567 559c Generated table #657@1: 30053 keys, 2212326 bytes
+2025/10/14-22:04:43.609 559c Generated table #658@1: 36779 keys, 779566 bytes
+2025/10/14-22:04:43.609 559c Compacted 1@1 + 6@2 files => 12040621 bytes
+2025/10/14-22:04:43.610 559c compacted to: files[ 0 0 6 0 0 0 0 ]
+2025/10/14-22:04:43.610 559c Delete type=2 #645
+2025/10/14-22:04:43.610 559c Delete type=2 #646
+2025/10/14-22:04:43.611 559c Delete type=2 #647
+2025/10/14-22:04:43.611 559c Delete type=2 #648
+2025/10/14-22:04:43.611 559c Delete type=2 #649
+2025/10/14-22:04:43.611 559c Delete type=2 #650
+2025/10/14-22:04:43.611 559c Delete type=2 #652
+2025/10/14-22:05:06.902 4c0c Level-0 table #660: started
+2025/10/14-22:05:06.948 4c0c Level-0 table #660: 1162500 bytes OK
+2025/10/14-22:05:06.949 4c0c Delete type=0 #651
+2025/10/14-22:05:07.010 8e2c Compacting 1@1 + 6@2 files
+2025/10/14-22:05:07.116 8e2c Generated table #661@1: 87945 keys, 2239319 bytes
+2025/10/14-22:05:07.187 8e2c Generated table #662@1: 98800 keys, 2250260 bytes
+2025/10/14-22:05:07.243 8e2c Generated table #663@1: 54262 keys, 2357815 bytes
+2025/10/14-22:05:07.292 8e2c Generated table #664@1: 23015 keys, 2206358 bytes
+2025/10/14-22:05:07.348 8e2c Generated table #665@1: 28871 keys, 2212639 bytes
+2025/10/14-22:05:07.375 8e2c Generated table #666@1: 38297 keys, 907722 bytes
+2025/10/14-22:05:07.375 8e2c Compacted 1@1 + 6@2 files => 12174113 bytes
+2025/10/14-22:05:07.375 8e2c compacted to: files[ 0 0 6 0 0 0 0 ]
+2025/10/14-22:05:07.375 8e2c Delete type=2 #653
+2025/10/14-22:05:07.375 8e2c Delete type=2 #654
+2025/10/14-22:05:07.375 8e2c Delete type=2 #655
+2025/10/14-22:05:07.376 8e2c Delete type=2 #656
+2025/10/14-22:05:07.376 8e2c Delete type=2 #657
+2025/10/14-22:05:07.376 8e2c Delete type=2 #658
+2025/10/14-22:05:07.376 8e2c Delete type=2 #660

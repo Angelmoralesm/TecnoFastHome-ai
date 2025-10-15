@@ -5,13 +5,14 @@ from ultralytics import YOLO
 # ======================
 # CONFIGURACIÓN
 # ======================
-MODEL_PATH = "best_glasses.pt"
+MODEL_PATH = "public/best_glasses.pt"
 IMG_SIZE = 640
 TARGET_FPS = 10
 CONFIDENCE_THRESHOLD = 0.40
 CLASS_NAMES = ['glasses']
 COLOR_DETECTED = (0, 255, 0)
 COLOR_NOT_DETECTED = (0, 0, 255)
+URL_RTSP = "rtsp://admin:iWAK5wAs2KA2j@f@192.168.1.108:554/cam/realmonitor?channel=1&subtype=0"
 
 # ======================
 # FLASK APP
@@ -31,12 +32,13 @@ CAM_INDEX = 0
 print(f"[INFO] Usando cámara #{CAM_INDEX} (configurada por defecto)")
 
 def generate_frames():
-    if CAM_INDEX is None or model is None:
+    if model is None:
         return
 
-    cap = cv2.VideoCapture(CAM_INDEX)
+    # Usar la URL de RTSP en lugar del índice de cámara
+    cap = cv2.VideoCapture(URL_RTSP)
     if not cap.isOpened():
-        print("[ERROR] No se pudo abrir la cámara.")
+        print("[ERROR] No se pudo abrir la cámara RTSP.")
         return
 
     prev = time.time()
@@ -45,6 +47,7 @@ def generate_frames():
     while True:
         ok, frame = cap.read()
         if not ok:
+            print("[ERROR] No se pudo leer el frame de la cámara RTSP.")
             break
 
         # Detección de lentes

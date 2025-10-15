@@ -3,6 +3,7 @@ import Head from 'next/head';
 import {
   Container,
   Grid,
+  SimpleGrid,
   Paper,
   Title,
   Text,
@@ -32,7 +33,11 @@ import {
   IconSettings as IconSettingsNav,
   IconChevronLeft,
   IconChevronRight,
-  IconLogout
+  IconLogout,
+  IconBrandWhatsapp,
+  IconShieldCheck,
+  IconActivity,
+  IconClock
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import { mockCameras, mockAlerts, mockDashboardStats } from '../data/mockData';
@@ -60,6 +65,29 @@ export default function Dashboard() {
     close();
   };
 
+  // Función para ejecutar el bot de WhatsApp
+  const executeWhatsAppBot = async () => {
+    try {
+      const response = await fetch('/api/execute-bot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        console.log('Bot de WhatsApp ejecutado correctamente');
+        // Aquí podrías mostrar una notificación de éxito
+      } else {
+        console.error('Error al ejecutar el bot de WhatsApp');
+        // Aquí podrías mostrar una notificación de error
+      }
+    } catch (error) {
+      console.error('Error de conexión:', error);
+      // Aquí podrías mostrar una notificación de error
+    }
+  };
+
   // Función para determinar el puerto del servidor Python según la cámara
   const getCameraPort = (cameraId: number): number => {
     const camera = cameras.find(c => c.id === cameraId);
@@ -69,11 +97,64 @@ export default function Dashboard() {
   return (
     <>
       <Head>
-        <title>Dashboard de Monitoreo</title>
+        <title>TecnoHome - Dashboard de Monitoreo IA</title>
         <meta name="description" content="Dashboard principal de monitoreo de seguridad con IA" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        <style>{`
+          @keyframes pulse {
+            0%, 100% {
+              opacity: 1;
+              transform: scale(1);
+            }
+            50% {
+              opacity: 0.8;
+              transform: scale(1.05);
+            }
+          }
+          
+          @keyframes float {
+            0%, 100% {
+              transform: translateY(0px);
+            }
+            50% {
+              transform: translateY(-10px);
+            }
+          }
+          
+          @keyframes glow {
+            0%, 100% {
+              box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            }
+            50% {
+              box-shadow: 0 0 40px rgba(102, 126, 234, 0.6);
+            }
+          }
+          
+          * {
+            scroll-behavior: smooth;
+          }
+          
+          ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+          }
+          
+          ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+          }
+        `}</style>
       </Head>
 
       <AppShell
@@ -83,45 +164,87 @@ export default function Dashboard() {
           collapsed: { mobile: true }
         }}
         style={{
-          backgroundColor: '#f8fafc',
-          fontFamily: 'Montserrat, sans-serif'
+          backgroundColor: '#f9fafb',
+          fontFamily: 'Montserrat, sans-serif',
+          minHeight: '100vh'
         }}
       >
         {/* Sidebar */}
         <AppShell.Navbar
           style={{
             backgroundColor: '#ffffff',
-            borderRight: '1px solid #e2e8f0',
-            boxShadow: '2px 0 8px rgba(0, 0, 0, 0.1)'
+            borderRight: '1px solid #e5e7eb',
+            boxShadow: '2px 0 8px rgba(0, 0, 0, 0.05)'
           }}
         >
           {/* Logo Section */}
           <Box
-            p="md"
+            p="xl"
             style={{
-              borderBottom: '1px solid #e2e8f0',
+              borderBottom: '1px solid #e5e7eb',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between'
             }}
           >
+            {!sidebarCollapsed && (
+              <Group gap="sm">
+                <Box
+                  style={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: '#dc2626',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+                  }}
+                >
+                  <IconShieldCheck size={24} color="#ffffff" stroke={2.5} />
+                </Box>
+                <div>
+                  <Text
+                    size="lg"
+                    fw={700}
+                    style={{
+                      color: '#374151',
+                      fontFamily: 'Montserrat, sans-serif',
+                      letterSpacing: '-0.02em'
+                    }}
+                  >
+                    TecnoHome
+                  </Text>
+                  <Text
+                    size="xs"
+                    style={{
+                      color: '#6b7280',
+                      fontFamily: 'Montserrat, sans-serif',
+                      fontWeight: '500'
+                    }}
+                  >
+                    Sistema de Vigilancia IA
+                  </Text>
+                </div>
+              </Group>
+            )}
             
             <ActionIcon
               variant="subtle"
-              size="md"
+              size="lg"
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
               style={{
-                color: '#64748b',
+                color: '#6b7280',
                 backgroundColor: 'transparent',
                 transition: 'all 0.2s ease'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f1f5f9';
-                e.currentTarget.style.color = '#475569';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#374151';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#64748b';
+                e.currentTarget.style.color = '#6b7280';
               }}
             >
               {sidebarCollapsed ? <IconChevronRight size={20} /> : <IconChevronLeft size={20} />}
@@ -132,24 +255,28 @@ export default function Dashboard() {
           <Box p="md">
             <Stack gap="xs">
               <Button
-                variant="light"
+                variant="filled"
                 fullWidth
                 justify="flex-start"
                 leftSection={<IconHome size={20} />}
                 style={{
-                  backgroundColor: '#f1f5f9',
-                  color: '#1e293b',
+                  backgroundColor: '#dc2626',
+                  color: '#ffffff',
                   border: 'none',
                   fontFamily: 'Montserrat, sans-serif',
                   fontWeight: '600',
                   height: '48px',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
+                  transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#e2e8f0';
+                  e.currentTarget.style.backgroundColor = '#b91c1c';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(220, 38, 38, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f1f5f9';
+                  e.currentTarget.style.backgroundColor = '#dc2626';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.3)';
                 }}
               >
                 {!sidebarCollapsed && 'Dashboard'}
@@ -162,20 +289,21 @@ export default function Dashboard() {
                 leftSection={<IconChartPie size={20} />}
                 style={{
                   backgroundColor: 'transparent',
-                  color: '#64748b',
+                  color: '#6b7280',
                   border: 'none',
                   fontFamily: 'Montserrat, sans-serif',
                   fontWeight: '500',
                   height: '48px',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f1f5f9';
-                  e.currentTarget.style.color = '#475569';
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  e.currentTarget.style.color = '#374151';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#64748b';
+                  e.currentTarget.style.color = '#6b7280';
                 }}
               >
                 {!sidebarCollapsed && 'Estadísticas'}
@@ -188,21 +316,23 @@ export default function Dashboard() {
                 leftSection={<IconSettingsNav size={20} />}
                 style={{
                   backgroundColor: 'transparent',
-                  color: '#64748b',
+                  color: '#6b7280',
                   border: 'none',
                   fontFamily: 'Montserrat, sans-serif',
                   fontWeight: '500',
                   height: '48px',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f1f5f9';
-                  e.currentTarget.style.color = '#475569';
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  e.currentTarget.style.color = '#374151';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#64748b';
+                  e.currentTarget.style.color = '#6b7280';
                 }}
+                onClick={() => window.location.href = '/admin'}
               >
                 {!sidebarCollapsed && 'Administración'}
               </Button>
@@ -217,7 +347,7 @@ export default function Dashboard() {
               left: 0,
               right: 0,
               padding: '16px',
-              borderTop: '1px solid #e2e8f0',
+              borderTop: '1px solid #e5e7eb',
               backgroundColor: '#ffffff'
             }}
           >
@@ -232,7 +362,7 @@ export default function Dashboard() {
                       size="sm" 
                       radius="xl"
                       style={{ 
-                        backgroundColor: '#475569',
+                        backgroundColor: '#dc2626',
                         color: '#ffffff',
                         fontFamily: 'Montserrat, sans-serif',
                         fontWeight: '700'
@@ -243,20 +373,21 @@ export default function Dashboard() {
                   }
                   style={{
                     backgroundColor: 'transparent',
-                    color: '#64748b',
+                    color: '#6b7280',
                     border: 'none',
                     fontFamily: 'Montserrat, sans-serif',
                     fontWeight: '500',
                     height: '48px',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
+                    transition: 'all 0.2s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#f1f5f9';
-                    e.currentTarget.style.color = '#475569';
+                    e.currentTarget.style.backgroundColor = '#f3f4f6';
+                    e.currentTarget.style.color = '#374151';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#64748b';
+                    e.currentTarget.style.color = '#6b7280';
                   }}
                 >
                   {!sidebarCollapsed && 'Usuario'}
@@ -320,319 +451,492 @@ export default function Dashboard() {
         <AppShell.Main>
           <Container size="xl" py="xl">
             {/* Welcome Section */}
-            <Box mb="xl">
-              <Title 
-                order={2} 
-                size="h1" 
-                style={{ 
-                  color: '#1e293b', 
-                  fontFamily: 'Montserrat, sans-serif',
-                  fontWeight: '600',
-                  letterSpacing: '-0.02em',
-                  marginBottom: '8px'
-                }}
-              >
-                Bienvenido al Dashboard
-              </Title>
-              <Text 
-                size="lg" 
-                style={{ 
-                  color: '#64748b', 
-                  fontFamily: 'Montserrat, sans-serif',
-                  fontWeight: '400',
-                  maxWidth: '600px'
-                }}
-              >
-                Monitorea en tiempo real la seguridad de tus instalaciones con inteligencia artificial avanzada
-              </Text>
-            </Box>
+            <Paper
+              p="xl"
+              mb="xl"
+              radius="md"
+              style={{
+                backgroundColor: '#ffffff',
+                border: '2px solid #dc2626',
+                boxShadow: '0 4px 16px rgba(220, 38, 38, 0.15)'
+              }}
+            >
+              <Group align="center" justify="space-between">
+                <div>
+                  <Title 
+                    order={1} 
+                    style={{ 
+                      color: '#374151', 
+                      fontFamily: 'Montserrat, sans-serif',
+                      fontWeight: '700',
+                      letterSpacing: '-0.02em',
+                      marginBottom: '8px',
+                      fontSize: '2rem'
+                    }}
+                  >
+                    Bienvenido al Dashboard
+                  </Title>
+                  <Group gap="md">
+                    <Badge
+                      size="lg"
+                      variant="light"
+                      style={{
+                        backgroundColor: '#dc2626',
+                        color: '#ffffff',
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '600'
+                      }}
+                      leftSection={<IconShieldCheck size={16} />}
+                    >
+                      Sistema Activo
+                    </Badge>
+                    <Group gap="xs">
+                      <IconClock size={18} color="#6b7280" />
+                      <Text 
+                        size="sm" 
+                        style={{ 
+                          color: '#6b7280', 
+                          fontFamily: 'Montserrat, sans-serif',
+                          fontWeight: '500'
+                        }}
+                      >
+                        {new Date().toLocaleDateString('es-ES', { 
+                          weekday: 'long', 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </Text>
+                    </Group>
+                  </Group>
+                  <Text 
+                    size="md" 
+                    mt="md"
+                    style={{ 
+                      color: '#6b7280', 
+                      fontFamily: 'Montserrat, sans-serif',
+                      fontWeight: '400',
+                      maxWidth: '600px',
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    Monitorea en tiempo real la seguridad de tus instalaciones con inteligencia artificial avanzada
+                  </Text>
+                </div>
+                <Box
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundColor: '#dc2626',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 8px 16px rgba(220, 38, 38, 0.3)'
+                  }}
+                >
+                  <IconActivity size={32} color="#ffffff" stroke={2} />
+                </Box>
+              </Group>
+            </Paper>
 
             {/* Stats Overview */}
-            <Grid mb="xl">
-              <Grid.Col span={{ base: 12, md: 3 }}>
-                <Paper 
-                  p="xl" 
-                  radius="md" 
-                  shadow="0 2px 8px rgba(0, 0, 0, 0.1)" 
-                  style={{ 
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.backgroundColor = '#f8fafc';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
-                    e.currentTarget.style.backgroundColor = '#ffffff';
-                  }}
-                >
-                  <Group gap="lg">
-                    <Box
+            <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} mb="xl" spacing="lg">
+              <Paper
+                p="xl"
+                radius="md"
+                shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(220, 38, 38, 0.15)';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.05)';
+                  e.currentTarget.style.borderColor = '#e5e7eb';
+                }}
+              >
+                <Group gap="lg" style={{ position: 'relative' }}>
+                  <Box
+                    style={{
+                      width: 48,
+                      height: 48,
+                      backgroundColor: '#dc2626',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+                    }}
+                  >
+                    <IconCamera size={24} color="#ffffff" stroke={2} />
+                  </Box>
+                  <div>
+                    <Text
+                      size="xs"
                       style={{
-                        width: 56,
-                        height: 56,
-                        backgroundColor: '#f1f5f9',
-                        borderRadius: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: '1px solid #cbd5e1'
+                        fontFamily: 'Montserrat, sans-serif',
+                        color: '#6b7280',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        marginBottom: '4px'
                       }}
                     >
-                      <IconCamera size={28} color="#475569" />
-                    </Box>
-                    <div>
-                      <Text 
-                        size="xs" 
-                        style={{ 
-                          fontFamily: 'Montserrat, sans-serif',
-                          color: '#64748b',
-                          fontWeight: '600',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                          marginBottom: '4px'
-                        }}
-                      >
-                        Cámaras Activas
-                      </Text>
-                      <Title 
-                        order={2} 
-                        style={{ 
-                          color: '#1e293b', 
-                          margin: 0, 
-                          fontFamily: 'Montserrat, sans-serif',
-                          fontWeight: '700',
-                          fontSize: '2rem'
-                        }}
-                      >
-                        {mockDashboardStats.activeCameras}
-                      </Title>
-                    </div>
-                  </Group>
-                </Paper>
-              </Grid.Col>
+                      Cámaras Activas
+                    </Text>
+                    <Title
+                      order={2}
+                      style={{
+                        color: '#374151',
+                        margin: 0,
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '700',
+                        fontSize: '2rem'
+                      }}
+                    >
+                      {mockDashboardStats.activeCameras}
+                    </Title>
+                  </div>
+                </Group>
+              </Paper>
 
-              <Grid.Col span={{ base: 12, md: 3 }}>
-                <Paper 
-                  p="xl" 
-                  radius="md" 
-                  shadow="0 2px 8px rgba(0, 0, 0, 0.1)" 
-                  style={{ 
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.backgroundColor = '#f8fafc';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
-                    e.currentTarget.style.backgroundColor = '#ffffff';
-                  }}
-                >
-                  <Group gap="lg">
-                    <Box
+              <Paper
+                p="xl"
+                radius="md"
+                shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(220, 38, 38, 0.15)';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.05)';
+                  e.currentTarget.style.borderColor = '#e5e7eb';
+                }}
+              >
+                <Group gap="lg">
+                  <Box
+                    style={{
+                      width: 48,
+                      height: 48,
+                      backgroundColor: '#dc2626',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+                    }}
+                  >
+                    <IconAlertTriangle size={24} color="#ffffff" />
+                  </Box>
+                  <div>
+                    <Text
+                      size="xs"
                       style={{
-                        width: 56,
-                        height: 56,
-                        backgroundColor: '#f1f5f9',
-                        borderRadius: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: '1px solid #cbd5e1'
+                        fontFamily: 'Montserrat, sans-serif',
+                        color: '#6b7280',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        marginBottom: '4px'
                       }}
                     >
-                      <IconAlertTriangle size={28} color="#475569" />
-                    </Box>
-                    <div>
-                      <Text 
-                        size="xs" 
-                        style={{ 
-                          fontFamily: 'Montserrat, sans-serif',
-                          color: '#64748b',
-                          fontWeight: '600',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                          marginBottom: '4px'
-                        }}
-                      >
-                        Alertas Hoy
-                      </Text>
-                      <Title 
-                        order={2} 
-                        style={{ 
-                          color: '#1e293b', 
-                          margin: 0, 
-                          fontFamily: 'Montserrat, sans-serif',
-                          fontWeight: '700',
-                          fontSize: '2rem'
-                        }}
-                      >
-                        {mockDashboardStats.totalAlerts}
-                      </Title>
-                    </div>
-                  </Group>
-                </Paper>
-              </Grid.Col>
+                      Alertas Hoy
+                    </Text>
+                    <Title
+                      order={2}
+                      style={{
+                        color: '#374151',
+                        margin: 0,
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '700',
+                        fontSize: '2rem'
+                      }}
+                    >
+                      {mockDashboardStats.totalAlerts}
+                    </Title>
+                  </div>
+                </Group>
+              </Paper>
 
-              <Grid.Col span={{ base: 12, md: 3 }}>
-                <Paper 
-                  p="xl" 
-                  radius="md" 
-                  shadow="0 2px 8px rgba(0, 0, 0, 0.1)" 
-                  style={{ 
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.backgroundColor = '#f8fafc';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
-                    e.currentTarget.style.backgroundColor = '#ffffff';
-                  }}
-                >
-                  <Group gap="lg">
-                    <Box
+              <Paper
+                p="xl"
+                radius="md"
+                shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(220, 38, 38, 0.15)';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.05)';
+                  e.currentTarget.style.borderColor = '#e5e7eb';
+                }}
+              >
+                <Group gap="lg">
+                  <Box
+                    style={{
+                      width: 48,
+                      height: 48,
+                      backgroundColor: '#dc2626',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+                    }}
+                  >
+                    <IconCheck size={24} color="#ffffff" />
+                  </Box>
+                  <div>
+                    <Text
+                      size="xs"
                       style={{
-                        width: 56,
-                        height: 56,
-                        backgroundColor: '#f1f5f9',
-                        borderRadius: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: '1px solid #cbd5e1'
+                        fontFamily: 'Montserrat, sans-serif',
+                        color: '#6b7280',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        marginBottom: '4px'
                       }}
                     >
-                      <IconCheck size={28} color="#475569" />
-                    </Box>
-                    <div>
-                      <Text 
-                        size="xs" 
-                        style={{ 
-                          fontFamily: 'Montserrat, sans-serif',
-                          color: '#64748b',
-                          fontWeight: '600',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                          marginBottom: '4px'
-                        }}
-                      >
-                        Estado General
-                      </Text>
-                      <Title 
-                        order={2} 
-                        style={{ 
-                          color: '#1e293b', 
-                          margin: 0, 
-                          fontFamily: 'Montserrat, sans-serif',
-                          fontWeight: '700',
-                          fontSize: '2rem'
-                        }}
-                      >
-                        {mockDashboardStats.systemStatus === 'stable' ? 'Estable' : 'Advertencia'}
-                      </Title>
-                    </div>
-                  </Group>
-                </Paper>
-              </Grid.Col>
+                      Estado General
+                    </Text>
+                    <Title
+                      order={2}
+                      style={{
+                        color: '#374151',
+                        margin: 0,
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '700',
+                        fontSize: '2rem'
+                      }}
+                    >
+                      {mockDashboardStats.systemStatus === 'stable' ? 'Estable' : 'Advertencia'}
+                    </Title>
+                  </div>
+                </Group>
+              </Paper>
 
-              <Grid.Col span={{ base: 12, md: 3 }}>
-                <Paper 
-                  p="xl" 
-                  radius="md" 
-                  shadow="0 2px 8px rgba(0, 0, 0, 0.1)" 
-                  style={{ 
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.backgroundColor = '#f8fafc';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
-                    e.currentTarget.style.backgroundColor = '#ffffff';
-                  }}
-                >
-                  <Group gap="lg">
-                    <Box
+              <Paper
+                p="xl"
+                radius="md"
+                shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(220, 38, 38, 0.15)';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.05)';
+                  e.currentTarget.style.borderColor = '#e5e7eb';
+                }}
+              >
+                <Group gap="lg">
+                  <Box
+                    style={{
+                      width: 48,
+                      height: 48,
+                      backgroundColor: '#dc2626',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+                    }}
+                  >
+                    <IconChartBar size={24} color="#ffffff" />
+                  </Box>
+                  <div>
+                    <Text
+                      size="xs"
                       style={{
-                        width: 56,
-                        height: 56,
-                        backgroundColor: '#f1f5f9',
-                        borderRadius: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: '1px solid #cbd5e1'
+                        fontFamily: 'Montserrat, sans-serif',
+                        color: '#6b7280',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        marginBottom: '4px'
                       }}
                     >
-                      <IconChartBar size={28} color="#475569" />
-                    </Box>
-                    <div>
-                      <Text 
-                        size="xs" 
-                        style={{ 
-                          fontFamily: 'Montserrat, sans-serif',
-                          color: '#64748b',
-                          fontWeight: '600',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                          marginBottom: '4px'
-                        }}
-                      >
-                        Precisión IA
-                      </Text>
-                      <Title 
-                        order={2} 
-                        style={{ 
-                          color: '#1e293b', 
-                          margin: 0, 
+                      Precisión IA
+                    </Text>
+                    <Title
+                      order={2}
+                      style={{
+                        color: '#374151',
+                        margin: 0,
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '700',
+                        fontSize: '2rem'
+                      }}
+                    >
+                      {mockDashboardStats.aiAccuracy}%
+                    </Title>
+                  </div>
+                </Group>
+              </Paper>
+            </SimpleGrid>
+
+            {/* Emergency WhatsApp Button */}
+            <Paper
+              p="xl"
+              radius="md"
+              shadow="0 4px 16px rgba(220, 38, 38, 0.15)"
+              style={{
+                backgroundColor: '#ffffff',
+                border: '2px solid #dc2626',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              mb="xl"
+            >
+              <Group justify="space-between" align="center" style={{ position: 'relative' }}>
+                <Group gap="lg">
+                  <Box
+                    style={{
+                      width: 60,
+                      height: 60,
+                      backgroundColor: '#dc2626',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 8px 16px rgba(220, 38, 38, 0.3)'
+                    }}
+                  >
+                    <IconBrandWhatsapp size={32} color="#ffffff" stroke={2} />
+                  </Box>
+                  <div>
+                    <Group gap="sm" mb="xs">
+                      <Title
+                        order={3}
+                        style={{
+                          color: '#374151',
                           fontFamily: 'Montserrat, sans-serif',
                           fontWeight: '700',
-                          fontSize: '2rem'
+                          letterSpacing: '-0.02em'
                         }}
                       >
-                        {mockDashboardStats.aiAccuracy}%
+                        Acciones de Emergencia
                       </Title>
-                    </div>
-                  </Group>
-                </Paper>
-              </Grid.Col>
-            </Grid>
+                      <Badge
+                        size="md"
+                        variant="light"
+                        style={{
+                          backgroundColor: '#dc2626',
+                          color: '#ffffff',
+                          fontFamily: 'Montserrat, sans-serif',
+                          fontWeight: '600'
+                        }}
+                      >
+                        CRÍTICO
+                      </Badge>
+                    </Group>
+                    <Text
+                      size="sm"
+                      style={{
+                        color: '#6b7280',
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '500',
+                        marginBottom: '4px'
+                      }}
+                    >
+                      Envía alertas de emergencia por WhatsApp a números configurados
+                    </Text>
+                    <Text
+                      size="xs"
+                      style={{
+                        color: '#9ca3af',
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '400'
+                      }}
+                    >
+                      💡 Primera vez: Ejecuta <code style={{ backgroundColor: '#fef2f2', padding: '2px 8px', borderRadius: '6px', fontWeight: '600', color: '#dc2626' }}>node public/setup-bot.mjs</code> para autenticar
+                    </Text>
+                  </div>
+                </Group>
+                <Button
+                  variant="filled"
+                  size="lg"
+                  radius="sm"
+                  leftSection={<IconAlertTriangle size={20} />}
+                  style={{
+                    backgroundColor: '#dc2626',
+                    border: 'none',
+                    fontFamily: 'Montserrat, sans-serif',
+                    fontWeight: '600',
+                    fontSize: '1rem',
+                    color: '#ffffff',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#b91c1c';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(220, 38, 38, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#dc2626';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                  onClick={executeWhatsAppBot}
+                >
+                  Enviar Alerta de Emergencia
+                </Button>
+              </Group>
+            </Paper>
 
             {/* Main Content Grid */}
-            <Grid>
+            <Grid gutter="xl">
               {/* Cameras Section */}
               <Grid.Col span={{ base: 12, lg: 8 }}>
-                <Paper 
-                  p="xl" 
-                  radius="md" 
-                  shadow="0 2px 8px rgba(0, 0, 0, 0.1)" 
-                  style={{ 
+                <Paper
+                  p="xl"
+                  radius="md"
+                  shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+                  style={{
                     backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #e5e7eb'
                   }}
                 >
                   <Group justify="space-between" align="center" mb="xl">
                     <div>
-                      <Title 
-                        order={2} 
-                        style={{ 
-                          color: '#1e293b', 
+                      <Title
+                        order={2}
+                        style={{
+                          color: '#374151',
                           fontFamily: 'Montserrat, sans-serif',
                           fontWeight: '700',
                           letterSpacing: '-0.02em',
@@ -641,10 +945,10 @@ export default function Dashboard() {
                       >
                         Monitoreo de Cámaras
                       </Title>
-                      <Text 
-                        size="sm" 
-                        style={{ 
-                          color: '#64748b', 
+                      <Text
+                        size="sm"
+                        style={{
+                          color: '#6b7280',
                           fontFamily: 'Montserrat, sans-serif',
                           fontWeight: '500'
                         }}
@@ -655,24 +959,30 @@ export default function Dashboard() {
                     <Button
                       variant="outline"
                       size="md"
-                      radius="md"
+                      radius="sm"
                       leftSection={<IconRefresh size={18} />}
                       style={{
-                        borderColor: '#cbd5e1',
-                        borderWidth: '1px',
-                        color: '#475569',
+                        borderColor: '#d1d5db',
+                        borderWidth: '2px',
+                        color: '#dc2626',
                         fontFamily: 'Montserrat, sans-serif',
                         fontWeight: '600',
-                        backgroundColor: '#f8fafc',
-                        transition: 'all 0.2s ease'
+                        backgroundColor: '#ffffff',
+                        transition: 'all 0.3s ease'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#e2e8f0';
-                        e.currentTarget.style.borderColor = '#94a3b8';
+                        e.currentTarget.style.backgroundColor = '#dc2626';
+                        e.currentTarget.style.borderColor = '#dc2626';
+                        e.currentTarget.style.color = '#ffffff';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(220, 38, 38, 0.3)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f8fafc';
-                        e.currentTarget.style.borderColor = '#cbd5e1';
+                        e.currentTarget.style.backgroundColor = '#ffffff';
+                        e.currentTarget.style.borderColor = '#d1d5db';
+                        e.currentTarget.style.color = '#dc2626';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
                       Actualizar
@@ -682,8 +992,8 @@ export default function Dashboard() {
                   <Grid gutter="lg">
                     {cameras.map((camera) => (
                       <Grid.Col key={camera.id} span={{ base: 12, md: 6 }}>
-                        <CameraCard 
-                          camera={camera} 
+                        <CameraCard
+                          camera={camera}
                           onViewCamera={openCameraModal}
                         />
                       </Grid.Col>
@@ -694,21 +1004,21 @@ export default function Dashboard() {
 
               {/* Alerts Section */}
               <Grid.Col span={{ base: 12, lg: 4 }}>
-                <Paper 
-                  p="xl" 
-                  radius="md" 
-                  shadow="0 2px 8px rgba(0, 0, 0, 0.1)" 
-                  style={{ 
+                <Paper
+                  p="xl"
+                  radius="md"
+                  shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+                  style={{
                     backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #e5e7eb'
                   }}
                 >
                   <Group justify="space-between" align="center" mb="xl">
                     <div>
-                      <Title 
-                        order={2} 
-                        style={{ 
-                          color: '#1e293b', 
+                      <Title
+                        order={2}
+                        style={{
+                          color: '#374151',
                           fontFamily: 'Montserrat, sans-serif',
                           fontWeight: '700',
                           letterSpacing: '-0.02em',
@@ -717,10 +1027,10 @@ export default function Dashboard() {
                       >
                         Alertas Recientes
                       </Title>
-                      <Text 
-                        size="sm" 
-                        style={{ 
-                          color: '#64748b', 
+                      <Text
+                        size="sm"
+                        style={{
+                          color: '#6b7280',
                           fontFamily: 'Montserrat, sans-serif',
                           fontWeight: '500'
                         }}
@@ -731,21 +1041,23 @@ export default function Dashboard() {
                     <ActionIcon
                       variant="outline"
                       size="lg"
-                      radius="md"
+                      radius="sm"
                       style={{
-                        borderColor: '#cbd5e1',
-                        borderWidth: '1px',
-                        color: '#475569',
-                        backgroundColor: '#f8fafc',
+                        borderColor: '#d1d5db',
+                        borderWidth: '2px',
+                        color: '#dc2626',
+                        backgroundColor: '#ffffff',
                         transition: 'all 0.2s ease'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#e2e8f0';
-                        e.currentTarget.style.borderColor = '#94a3b8';
+                        e.currentTarget.style.backgroundColor = '#dc2626';
+                        e.currentTarget.style.borderColor = '#dc2626';
+                        e.currentTarget.style.color = '#ffffff';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f8fafc';
-                        e.currentTarget.style.borderColor = '#cbd5e1';
+                        e.currentTarget.style.backgroundColor = '#ffffff';
+                        e.currentTarget.style.borderColor = '#d1d5db';
+                        e.currentTarget.style.color = '#dc2626';
                       }}
                     >
                       <IconBell size={20} />
@@ -758,29 +1070,35 @@ export default function Dashboard() {
                     ))}
                   </Stack>
 
-                  <Divider my="xl" style={{ borderColor: '#e2e8f0' }} />
+                  <Divider my="xl" style={{ borderColor: '#e5e7eb' }} />
 
                   <Button
                     variant="outline"
                     size="md"
-                    radius="md"
+                    radius="sm"
                     fullWidth
                     style={{
-                      borderColor: '#cbd5e1',
-                      borderWidth: '1px',
-                      color: '#475569',
+                      borderColor: '#d1d5db',
+                      borderWidth: '2px',
+                      color: '#dc2626',
                       fontFamily: 'Montserrat, sans-serif',
                       fontWeight: '600',
-                      backgroundColor: '#f8fafc',
-                      transition: 'all 0.2s ease'
+                      backgroundColor: '#ffffff',
+                      transition: 'all 0.3s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#e2e8f0';
-                      e.currentTarget.style.borderColor = '#94a3b8';
+                      e.currentTarget.style.backgroundColor = '#dc2626';
+                      e.currentTarget.style.borderColor = '#dc2626';
+                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(220, 38, 38, 0.3)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#f8fafc';
-                      e.currentTarget.style.borderColor = '#cbd5e1';
+                      e.currentTarget.style.backgroundColor = '#ffffff';
+                      e.currentTarget.style.borderColor = '#d1d5db';
+                      e.currentTarget.style.color = '#dc2626';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
                     Ver Todas las Alertas
@@ -898,63 +1216,59 @@ export default function Dashboard() {
               }}
             >
               <Grid gutter="lg">
-                <Grid.Col span={6}>
-                  <Box>
-                    <Text 
-                      size="sm" 
-                      style={{ 
-                        fontFamily: 'Montserrat, sans-serif',
-                        color: '#64748b',
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        marginBottom: '8px'
-                      }}
-                    >
-                      Estado del Sistema
-                    </Text>
-                    <Badge 
-                      color="green" 
-                      variant="light" 
-                      size="lg"
-                      style={{ 
-                        fontFamily: 'Montserrat, sans-serif',
-                        fontWeight: '600',
-                        padding: '8px 16px',
-                        borderRadius: '4px'
-                      }}
-                    >
-                      Activa
-                    </Badge>
-                  </Box>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <Box>
-                    <Text 
-                      size="sm" 
-                      style={{ 
-                        fontFamily: 'Montserrat, sans-serif',
-                        color: '#64748b',
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        marginBottom: '8px'
-                      }}
-                    >
-                      Última Actualización
-                    </Text>
-                    <Text 
-                      size="lg" 
-                      fw={600} 
-                      style={{ 
-                        fontFamily: 'Montserrat, sans-serif',
-                        color: '#1e293b'
-                      }}
-                    >
-                      Hace 30 segundos
-                    </Text>
-                  </Box>
-                </Grid.Col>
+                <Box>
+                  <Text
+                    size="sm"
+                    style={{
+                      fontFamily: 'Montserrat, sans-serif',
+                      color: '#64748b',
+                      fontWeight: '600',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      marginBottom: '8px'
+                    }}
+                  >
+                    Estado del Sistema
+                  </Text>
+                  <Badge
+                    color="green"
+                    variant="light"
+                    size="lg"
+                    style={{
+                      fontFamily: 'Montserrat, sans-serif',
+                      fontWeight: '600',
+                      padding: '8px 16px',
+                      borderRadius: '4px'
+                    }}
+                  >
+                    Activa
+                  </Badge>
+                </Box>
+                <Box>
+                  <Text
+                    size="sm"
+                    style={{
+                      fontFamily: 'Montserrat, sans-serif',
+                      color: '#64748b',
+                      fontWeight: '600',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      marginBottom: '8px'
+                    }}
+                  >
+                    Última Actualización
+                  </Text>
+                  <Text
+                    size="lg"
+                    fw={600}
+                    style={{
+                      fontFamily: 'Montserrat, sans-serif',
+                      color: '#1e293b'
+                    }}
+                  >
+                    Hace 30 segundos
+                  </Text>
+                </Box>
               </Grid>
             </Paper>
           )}
