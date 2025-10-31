@@ -20,6 +20,7 @@ import {
   AppShell
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 import {
   IconCamera,
   IconAlertTriangle,
@@ -68,6 +69,15 @@ export default function Dashboard() {
   // Función para ejecutar el bot de WhatsApp
   const executeWhatsAppBot = async () => {
     try {
+      notifications.show({
+        title: '🚀 Enviando alerta de emergencia',
+        message: 'Conectando con el bot de WhatsApp...',
+        color: 'blue',
+        loading: true,
+        autoClose: false,
+        id: 'whatsapp-bot'
+      });
+
       const response = await fetch('/api/execute-bot', {
         method: 'POST',
         headers: {
@@ -77,14 +87,38 @@ export default function Dashboard() {
 
       if (response.ok) {
         console.log('Bot de WhatsApp ejecutado correctamente');
-        // Aquí podrías mostrar una notificación de éxito
+        notifications.update({
+          id: 'whatsapp-bot',
+          title: '✅ ¡Alerta enviada exitosamente!',
+          message: 'Los mensajes de emergencia han sido enviados por WhatsApp',
+          color: 'green',
+          icon: <IconCheck size={18} />,
+          loading: false,
+          autoClose: 5000
+        });
       } else {
         console.error('Error al ejecutar el bot de WhatsApp');
-        // Aquí podrías mostrar una notificación de error
+        notifications.update({
+          id: 'whatsapp-bot',
+          title: '❌ Error al enviar alerta',
+          message: 'No se pudo ejecutar el bot de WhatsApp. Verifica la configuración.',
+          color: 'red',
+          icon: <IconAlertTriangle size={18} />,
+          loading: false,
+          autoClose: 8000
+        });
       }
     } catch (error) {
       console.error('Error de conexión:', error);
-      // Aquí podrías mostrar una notificación de error
+      notifications.update({
+        id: 'whatsapp-bot',
+        title: '❌ Error de conexión',
+        message: 'No se pudo conectar con el servidor. Verifica que esté ejecutándose.',
+        color: 'red',
+        icon: <IconAlertTriangle size={18} />,
+        loading: false,
+        autoClose: 8000
+      });
     }
   };
 
