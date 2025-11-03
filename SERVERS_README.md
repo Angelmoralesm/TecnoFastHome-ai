@@ -83,8 +83,9 @@ python public/EPP.py --port 5001
 └──────────────┘   └───────────────┘
 ```
 
-## 🔍 Verificación
+## 🔍 Verificación y Monitoring
 
+### Verificación Manual
 Para verificar que los servidores están corriendo:
 
 ```batch
@@ -92,6 +93,125 @@ netstat -ano | findstr "5000\|5001"
 ```
 
 O visita las URLs directamente en tu navegador.
+
+### Monitor Automático de Endpoints
+
+Se incluyen dos versiones del sistema de monitoring:
+
+#### 🟢 Versión Node.js (Recomendada para Vercel)
+
+**Ventajas:**
+- ✅ Compatible con Vercel y despliegue web
+- ✅ Sin dependencias externas
+- ✅ Funciona en cualquier entorno Node.js
+- ✅ Mismo rendimiento que la versión Python
+
+##### Inicio Rápido del Monitor Node.js
+
+```batch
+# Desde el directorio raíz del proyecto
+monitor-endpoints-nodejs.bat
+```
+
+##### Uso Manual del Script Node.js
+
+```bash
+# Configuración por defecto (cada 5 segundos)
+node monitor-endpoints.js
+
+# Configuración personalizada
+node monitor-endpoints.js --interval 10 --timeout 3
+
+# Ver ayuda
+node monitor-endpoints.js --help
+```
+
+##### Endpoint API para Vercel
+
+También se incluye un endpoint API compatible con Vercel:
+
+```javascript
+// Llamada desde JavaScript
+fetch('/api/monitor-endpoints')
+  .then(res => res.json())
+  .then(data => console.log(data));
+
+// Respuesta típica:
+{
+  "timestamp": "2025-11-02T14:32:25.000Z",
+  "summary": {
+    "total": 2,
+    "available": 1,
+    "unavailable": 1
+  },
+  "endpoints": [
+    {
+      "port": 5000,
+      "name": "Detección de Incendios",
+      "url": "http://localhost:5000/video_feed",
+      "model": "main.py (best2.onnx)",
+      "isAvailable": false,
+      "lastChecked": "2025-11-02T14:32:25.000Z"
+    }
+  ],
+  "message": "Verificación completada. 1/2 endpoints disponibles."
+}
+```
+
+#### 🔵 Versión Python (Alternativa)
+
+##### Inicio Rápido del Monitor Python
+
+```batch
+# Desde el directorio raíz del proyecto
+monitor_endpoints.bat
+```
+
+##### Uso Manual del Script Python
+
+```bash
+# Configuración por defecto (cada 5 segundos)
+python public/monitor_endpoints.py
+
+# Configuración personalizada
+python public/monitor_endpoints.py --interval 10 --timeout 3
+
+# Ver ayuda
+python public/monitor_endpoints.py --help
+```
+
+#### Características del Monitor
+
+- ✅ **Detección automática de cambios**: Avisa cuando un endpoint se conecta o desconecta
+- 🎨 **Salida coloreada**: Fácil identificación visual de estados y cambios
+- ⚙️ **Configurable**: Personaliza intervalos de verificación y timeouts
+- 📊 **Información detallada**: Muestra modelo, puerto y URL de cada endpoint
+- 🛑 **Interrupción segura**: Presiona Ctrl+C para detener en cualquier momento
+- 🌐 **Compatible con Vercel**: La versión Node.js funciona perfectamente en Vercel
+
+#### Ejemplo de Salida
+
+```
+==================================================
+🖥️  MONITOR DE ENDPOINTS DE IA - TECNOHOME AI
+==================================================
+⏱️  Intervalo de verificación: 5 segundos
+⏳ Timeout por request: 2 segundos
+==================================================
+
+🚀 Iniciando monitoring continuo...
+Presiona Ctrl+C para detener
+
+🔍 [2:32:15 p. m.] Verificando endpoints...
+████████████████████████████████████████████████████████████
+⚠️  ¡CAMBIO DE ESTADO DETECTADO! ⚠️
+████████████████████████████████████████████████████████████
+
+🔴 [2:32:25 p. m.] SE DESCONECTÓ
+   Servicio: Detección de Incendios (Puerto 5000)
+   Modelo: main.py (best2.onnx)
+   URL: http://localhost:5000/video_feed
+```
 
 ## 🛠️ Solución de Problemas
 

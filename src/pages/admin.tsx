@@ -39,7 +39,8 @@ import {
   IconShieldCheck,
   IconPhone,
   IconBrandWhatsapp,
-  IconAlertCircle
+  IconAlertCircle,
+  IconRobot
 } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 
@@ -362,6 +363,34 @@ export default function AdminPage() {
                 }}
               >
                 {!sidebarCollapsed && 'Administración'}
+              </Button>
+
+              <Button
+                variant="subtle"
+                fullWidth
+                justify="flex-start"
+                leftSection={<IconRobot size={20} />}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: '#7c3aed',
+                  border: 'none',
+                  fontFamily: 'Montserrat, sans-serif',
+                  fontWeight: '600',
+                  height: '48px',
+                  borderRadius: '8px',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  e.currentTarget.style.color = '#6d28d9';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#7c3aed';
+                }}
+                onClick={() => router.push('/config-ia')}
+              >
+                {!sidebarCollapsed && 'Configuración IA'}
               </Button>
             </Stack>
           </Box>
@@ -876,7 +905,7 @@ export default function AdminPage() {
             required
             styles={{
               label: { fontFamily: 'Montserrat, sans-serif', fontWeight: '600' },
-              input: { fontFamily: 'Montserrat, sans-serif', fontFamily: 'monospace' }
+              input: { fontFamily: 'monospace' }
             }}
           />
           
