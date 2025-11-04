@@ -161,3 +161,38 @@ export async function checkMonitorIaApiHealth(): Promise<boolean> {
   }
 }
 
+/**
+ * Obtiene la URL del stream de video
+ */
+export function getStreamUrl(): string {
+  return `${MONITOR_IA_API_URL}/api/stream`;
+}
+
+/**
+ * Verifica el estado del stream de video
+ */
+export async function checkStreamStatus(): Promise<{
+  available: boolean;
+  message: string;
+}> {
+  try {
+    const response = await fetch(`${MONITOR_IA_API_URL}/api/stream/status`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error verificando stream: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+      throw new Error('No se puede conectar con Monitor-IA. Verifica que esté ejecutándose y que la URL sea correcta');
+    }
+    throw error;
+  }
+}
+

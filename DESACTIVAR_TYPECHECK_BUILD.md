@@ -164,3 +164,4 @@ npm run build
 **Configuración:** Build flexible sin verificación estricta  
 **Compatibilidad:** TypeScript + JavaScript mixto
 
+

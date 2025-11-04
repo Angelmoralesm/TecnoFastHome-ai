@@ -321,6 +321,34 @@ export default function Dashboard() {
                 variant="subtle"
                 fullWidth
                 justify="flex-start"
+                leftSection={<IconVideo size={20} />}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: '#6b7280',
+                  border: 'none',
+                  fontFamily: 'Montserrat, sans-serif',
+                  fontWeight: '500',
+                  height: '48px',
+                  borderRadius: '8px',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  e.currentTarget.style.color = '#374151';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#6b7280';
+                }}
+                onClick={() => window.location.href = '/camera-live'}
+              >
+                {!sidebarCollapsed && 'Cámara en Vivo'}
+              </Button>
+
+              <Button
+                variant="subtle"
+                fullWidth
+                justify="flex-start"
                 leftSection={<IconChartPie size={20} />}
                 style={{
                   backgroundColor: 'transparent',

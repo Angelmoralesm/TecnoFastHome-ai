@@ -50,6 +50,7 @@ import {
   checkMonitorIaApiHealth,
   type MonitorIaConfig
 } from '~/services/monitorIaApi';
+import LiveCameraFeed from '~/components/LiveCameraFeed';
 
 export default function ConfigIaPage() {
   const router = useRouter();
@@ -900,6 +901,67 @@ export default function ConfigIaPage() {
                   </Paper>
                 </Grid.Col>
               </Grid>
+            )}
+
+            {/* Vista previa de la Cámara */}
+            {!loading && apiAvailable && (
+              <Paper
+                p="xl"
+                mt="xl"
+                radius="md"
+                shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb'
+                }}
+              >
+                <Group justify="space-between" align="center" mb="xl">
+                  <div>
+                    <Title
+                      order={2}
+                      style={{
+                        color: '#374151',
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '700',
+                        fontSize: '1.5rem',
+                        marginBottom: '4px'
+                      }}
+                    >
+                      Vista Previa de la Cámara
+                    </Title>
+                    <Text
+                      size="sm"
+                      style={{
+                        color: '#6b7280',
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '500'
+                      }}
+                    >
+                      Visualización en tiempo real del stream RTSP configurado
+                    </Text>
+                  </div>
+                  <Box
+                    style={{
+                      width: 48,
+                      height: 48,
+                      backgroundColor: '#dc2626',
+                      borderRadius: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+                    }}
+                  >
+                    <IconRobot size={28} color="#ffffff" stroke={2} />
+                  </Box>
+                </Group>
+
+                <LiveCameraFeed 
+                  showControls={true} 
+                  height="560px"
+                  title="Stream RTSP de Monitor-IA"
+                />
+              </Paper>
             )}
 
             {/* Botones de Acción */}
