@@ -19,7 +19,8 @@ import {
   Alert,
   Loader,
   ActionIcon,
-  List
+  List,
+  Switch
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import {
@@ -62,7 +63,8 @@ export default function ConfigIaPage() {
     conf_persona: 0.5,
     conf_casco: 0.7,
     conf_guantes: 0.7,
-    whatsapp_phones: []
+    whatsapp_phones: [],
+    whatsapp_enabled: false
   });
 
   // Estados para el formulario
@@ -71,7 +73,8 @@ export default function ConfigIaPage() {
     conf_persona: 0.5,
     conf_casco: 0.7,
     conf_guantes: 0.7,
-    whatsapp_phones: [] as string[]
+    whatsapp_phones: [] as string[],
+    whatsapp_enabled: false
   });
   const [newPhone, setNewPhone] = useState('');
 
@@ -106,7 +109,8 @@ export default function ConfigIaPage() {
         conf_persona: currentConfig.conf_persona,
         conf_casco: currentConfig.conf_casco,
         conf_guantes: currentConfig.conf_guantes,
-        whatsapp_phones: currentConfig.whatsapp_phones || []
+        whatsapp_phones: currentConfig.whatsapp_phones || [],
+        whatsapp_enabled: currentConfig.whatsapp_enabled ?? false
       });
 
       notifications.show({
@@ -828,6 +832,59 @@ export default function ConfigIaPage() {
                     </Group>
 
                     <Stack gap="md">
+                      {/* Switch para activar/desactivar notificaciones */}
+                      <Paper
+                        p="md"
+                        style={{
+                          backgroundColor: formData.whatsapp_enabled ? '#f0fdf4' : '#fef2f2',
+                          border: `2px solid ${formData.whatsapp_enabled ? '#10b981' : '#ef4444'}`,
+                          borderRadius: '8px'
+                        }}
+                      >
+                        <Group justify="space-between" align="center">
+                          <div>
+                            <Text
+                              fw={600}
+                              style={{
+                                color: '#374151',
+                                fontFamily: 'Montserrat, sans-serif',
+                                marginBottom: '4px'
+                              }}
+                            >
+                              Estado de Notificaciones
+                            </Text>
+                            <Text
+                              size="sm"
+                              style={{
+                                color: '#6b7280',
+                                fontFamily: 'Montserrat, sans-serif'
+                              }}
+                            >
+                              {formData.whatsapp_enabled 
+                                ? '✅ Las notificaciones están activadas' 
+                                : '🔕 Las notificaciones están desactivadas'}
+                            </Text>
+                          </div>
+                          <Switch
+                            size="lg"
+                            checked={formData.whatsapp_enabled}
+                            onChange={(e) => setFormData({ 
+                              ...formData, 
+                              whatsapp_enabled: e.currentTarget.checked 
+                            })}
+                            color="green"
+                            onLabel="ON"
+                            offLabel="OFF"
+                            styles={{
+                              track: {
+                                cursor: 'pointer',
+                                fontFamily: 'Montserrat, sans-serif',
+                                fontWeight: '700'
+                              }
+                            }}
+                          />
+                        </Group>
+                      </Paper>
                       <Group gap="xs">
                         <TextInput
                           placeholder="+56912345678"

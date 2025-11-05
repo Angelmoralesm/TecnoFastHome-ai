@@ -18,6 +18,7 @@ export interface MonitorIaConfig {
   conf_casco: number;
   conf_guantes: number;
   whatsapp_phones: string[];
+  whatsapp_enabled: boolean;
 }
 
 export interface WhatsAppResponse {
