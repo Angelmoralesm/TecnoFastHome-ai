@@ -6,17 +6,18 @@ import {
   Title,
   Text,
   Group,
+  Button,
+  Stack,
   Box,
   AppShell,
   Avatar,
   Menu,
   Badge,
-  Button,
-  ActionIcon,
-  Stack,
-  Grid,
-  Alert
+  Alert,
+  Loader,
+  ActionIcon
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import {
   IconHome,
   IconChartPie,
@@ -25,53 +26,154 @@ import {
   IconChevronRight,
   IconLogout,
   IconShieldCheck,
+  IconRefresh,
   IconRobot,
-  IconVideo,
-  IconAlertCircle,
+  IconBell,
+  IconClock,
+  IconAlertTriangle,
   IconPlugConnected,
-  IconPlugConnectedX
+  IconPlugConnectedX,
+  IconDatabase
 } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import LiveCameraFeed from '~/components/LiveCameraFeed';
-import { checkMonitorIaApiHealth, getMonitorIaLogs } from '~/services/monitorIaApi';
+import {
+  getMonitorIaLogs,
+  checkMonitorIaApiHealth,
+  type LogEntry
+} from '~/services/monitorIaApi';
+import mockNotificationsData from '~/data/mockNotifications.json';
 
-export default function CameraLivePage() {
+export default function HistorialNotificacionesPage() {
   const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [apiAvailable, setApiAvailable] = useState(false);
-  const [recentAlerts, setRecentAlerts] = useState<Array<{ timestamp: string; message: string }>>([]);
+  const [usingMockData, setUsingMockData] = useState(false);
+  const [notificationHistory, setNotificationHistory] = useState<LogEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  // Verificar disponibilidad de la API y cargar historial
   useEffect(() => {
-    checkApi();
-    loadRecentAlerts();
-    
-    // Actualizar alertas cada 5 segundos
-    const interval = setInterval(() => {
-      loadRecentAlerts();
-    }, 5000);
-
-    return () => clearInterval(interval);
+    checkApiAndLoadHistory();
   }, []);
 
-  const checkApi = async () => {
-    const isAvailable = await checkMonitorIaApiHealth();
-    setApiAvailable(isAvailable);
+  const loadMockData = () => {
+    // Cargar datos mock con la nueva estructura
+    setNotificationHistory(mockNotificationsData.notifications as LogEntry[]);
+    setUsingMockData(true);
+    notifications.show({
+      title: '📋 Datos de demostración',
+      message: 'Mostrando datos de ejemplo. Conecta el backend para ver datos reales.',
+      color: 'blue',
+      autoClose: 4000
+    });
   };
 
-  const loadRecentAlerts = async () => {
+  const checkApiAndLoadHistory = async () => {
+    setLoading(true);
+    setUsingMockData(false);
+    try {
+      const isAvailable = await checkMonitorIaApiHealth();
+      setApiAvailable(isAvailable);
+
+      if (isAvailable) {
+        await loadNotificationHistory();
+      } else {
+        // Fallback a datos mockeados
+        loadMockData();
+      }
+    } catch (error) {
+      console.error('Error verificando API:', error);
+      // Fallback a datos mockeados en caso de error
+      loadMockData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadNotificationHistory = async () => {
     try {
       const logs = await getMonitorIaLogs();
-      setRecentAlerts(logs.slice(-5).reverse()); // Últimas 5 alertas
+      setNotificationHistory(logs);
+      setUsingMockData(false);
     } catch (error) {
-      console.error('Error cargando alertas:', error);
+      console.error('Error cargando historial de notificaciones:', error);
+      // Fallback a datos mockeados
+      loadMockData();
+      notifications.show({
+        title: '⚠️ Error de conexión',
+        message: 'Usando datos de demostración',
+        color: 'yellow',
+        autoClose: 3000
+      });
     }
+  };
+
+  const handleRefresh = async () => {
+    setLoading(true);
+    // Intentar reconectar con la API
+    const isAvailable = await checkMonitorIaApiHealth();
+    setApiAvailable(isAvailable);
+    
+    if (isAvailable) {
+      await loadNotificationHistory();
+      notifications.show({
+        title: '✅ Actualizado',
+        message: 'Historial de notificaciones actualizado desde el servidor',
+        color: 'green',
+        autoClose: 2000
+      });
+    } else {
+      loadMockData();
+    }
+    setLoading(false);
+  };
+
+  // Función para obtener el color según el nivel y source del log
+  const getNotificationStyle = (log: LogEntry) => {
+    // Por nivel
+    if (log.level === 'PELIGRO') {
+      return { bg: '#fef2f2', border: '#fecaca', icon: '#dc2626', badgeColor: 'red' };
+    }
+    if (log.level === 'ALERTA') {
+      return { bg: '#fffbeb', border: '#fde68a', icon: '#f59e0b', badgeColor: 'orange' };
+    }
+    // Por source
+    if (log.source === 'DETECTOR_FUEGO') {
+      return { bg: '#fef2f2', border: '#fecaca', icon: '#dc2626', badgeColor: 'red' };
+    }
+    if (log.source === 'DETECTOR_EPP') {
+      return { bg: '#fffbeb', border: '#fde68a', icon: '#f59e0b', badgeColor: 'orange' };
+    }
+    if (log.source === 'DEMO_TEST') {
+      return { bg: '#f0fdf4', border: '#bbf7d0', icon: '#22c55e', badgeColor: 'green' };
+    }
+    return { bg: '#eff6ff', border: '#bfdbfe', icon: '#3b82f6', badgeColor: 'blue' };
+  };
+
+  // Función para obtener el icono según el source
+  const getSourceIcon = (source: string) => {
+    if (source === 'DETECTOR_FUEGO') return <IconAlertTriangle size={22} color="#ffffff" stroke={2} />;
+    if (source === 'DETECTOR_EPP') return <IconAlertTriangle size={22} color="#ffffff" stroke={2} />;
+    if (source === 'DEMO_TEST') return <IconBell size={22} color="#ffffff" stroke={2} />;
+    return <IconBell size={22} color="#ffffff" stroke={2} />;
+  };
+
+  // Función para obtener el nombre legible del source
+  const getSourceLabel = (source: string) => {
+    const labels: Record<string, string> = {
+      'DETECTOR_EPP': 'Detector EPP',
+      'DETECTOR_FUEGO': 'Detector Fuego',
+      'DEMO_TEST': 'Prueba Sistema',
+      'SISTEMA': 'Sistema'
+    };
+    return labels[source] || source;
   };
 
   return (
     <>
       <Head>
-        <title>TecnoHome - Cámara en Vivo</title>
-        <meta name="description" content="Visualización de cámara en tiempo real" />
+        <title>TecnoHome - Historial de Notificaciones</title>
+        <meta name="description" content="Historial de notificaciones del sistema TecnoHome" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -203,34 +305,6 @@ export default function CameraLivePage() {
               </Button>
 
               <Button
-                variant="filled"
-                fullWidth
-                justify="flex-start"
-                leftSection={<IconVideo size={20} />}
-                style={{
-                  backgroundColor: '#dc2626',
-                  color: '#ffffff',
-                  border: 'none',
-                  fontFamily: 'Montserrat, sans-serif',
-                  fontWeight: '600',
-                  height: '48px',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#b91c1c';
-                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(220, 38, 38, 0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#dc2626';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.3)';
-                }}
-              >
-                {!sidebarCollapsed && 'Cámara en Vivo'}
-              </Button>
-
-              <Button
                 variant="subtle"
                 fullWidth
                 justify="flex-start"
@@ -311,6 +385,34 @@ export default function CameraLivePage() {
                 onClick={() => router.push('/config-ia')}
               >
                 {!sidebarCollapsed && 'Configuración IA'}
+              </Button>
+
+              <Button
+                variant="filled"
+                fullWidth
+                justify="flex-start"
+                leftSection={<IconBell size={20} />}
+                style={{
+                  backgroundColor: '#f59e0b',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontFamily: 'Montserrat, sans-serif',
+                  fontWeight: '600',
+                  height: '48px',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#d97706';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(245, 158, 11, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f59e0b';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+                }}
+              >
+                {!sidebarCollapsed && 'Historial'}
               </Button>
             </Stack>
           </Box>
@@ -433,8 +535,8 @@ export default function CameraLivePage() {
               radius="md"
               style={{
                 backgroundColor: '#ffffff',
-                border: '2px solid #dc2626',
-                boxShadow: '0 4px 16px rgba(220, 38, 38, 0.15)'
+                border: '2px solid #f59e0b',
+                boxShadow: '0 4px 16px rgba(245, 158, 11, 0.15)'
               }}
             >
               <Group justify="space-between" align="center">
@@ -450,7 +552,7 @@ export default function CameraLivePage() {
                       fontSize: '2rem'
                     }}
                   >
-                    Cámara en Vivo
+                    Historial de Notificaciones
                   </Title>
                   <Group gap="md" mt="sm">
                     <Badge
@@ -466,6 +568,33 @@ export default function CameraLivePage() {
                     >
                       {apiAvailable ? 'API Conectada' : 'API Desconectada'}
                     </Badge>
+                    {usingMockData && (
+                      <Badge
+                        size="lg"
+                        variant="light"
+                        leftSection={<IconDatabase size={16} />}
+                        style={{
+                          backgroundColor: '#3b82f6',
+                          color: '#ffffff',
+                          fontFamily: 'Montserrat, sans-serif',
+                          fontWeight: '600'
+                        }}
+                      >
+                        Datos de Demo
+                      </Badge>
+                    )}
+                    <Badge
+                      size="lg"
+                      variant="light"
+                      style={{
+                        backgroundColor: '#f3f4f6',
+                        color: '#374151',
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: '600'
+                      }}
+                    >
+                      {notificationHistory.length} notificaciones
+                    </Badge>
                   </Group>
                   <Text 
                     size="md" 
@@ -476,141 +605,210 @@ export default function CameraLivePage() {
                       fontWeight: '400'
                     }}
                   >
-                    Monitoreo en tiempo real con detección de EPP por inteligencia artificial
+                    Registro completo de todas las alertas y notificaciones enviadas por el sistema
                   </Text>
                 </div>
                 <Box
                   style={{
                     width: 60,
                     height: 60,
-                    backgroundColor: '#dc2626',
+                    backgroundColor: '#f59e0b',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 8px 16px rgba(220, 38, 38, 0.3)'
+                    boxShadow: '0 8px 16px rgba(245, 158, 11, 0.3)'
                   }}
                 >
-                  <IconVideo size={32} color="#ffffff" stroke={2} />
+                  <IconBell size={32} color="#ffffff" stroke={2} />
                 </Box>
               </Group>
             </Paper>
 
             {/* Alert de estado */}
-            {!apiAvailable && (
+            {!apiAvailable && !loading && usingMockData && (
               <Alert
-                icon={<IconAlertCircle size={18} />}
-                title="No se puede conectar con monitor-ia"
-                color="yellow"
+                icon={<IconDatabase size={18} />}
+                title="Modo Demostración Activo"
+                color="blue"
                 mb="xl"
               >
                 <Text size="sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                  Verifica que el backend de monitor-ia esté ejecutándose y que la cámara RTSP esté configurada.
+                  No se puede conectar con monitor-ia. Mostrando datos de ejemplo para demostración.
+                </Text>
+                <Text size="xs" mt="sm" style={{ fontFamily: 'Montserrat, sans-serif', color: '#64748b' }}>
+                  Para ver datos reales, verifica que el backend de monitor-ia esté ejecutándose.
                 </Text>
               </Alert>
             )}
 
-            <Grid gutter="xl">
-              {/* Cámara Principal */}
-              <Grid.Col span={{ base: 12, lg: 8 }}>
-                <LiveCameraFeed 
-                  showControls={true} 
-                  height="600px"
-                  title="Monitor-IA • Detección de EPP"
-                />
-              </Grid.Col>
-
-              {/* Panel de Alertas Recientes */}
-              <Grid.Col span={{ base: 12, lg: 4 }}>
-                <Paper
-                  p="xl"
-                  radius="md"
-                  shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
-                  style={{
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e5e7eb',
-                    height: '100%'
-                  }}
-                >
+            {/* Contenido principal */}
+            <Paper
+              p="xl"
+              radius="md"
+              shadow="0 2px 8px rgba(0, 0, 0, 0.05)"
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb'
+              }}
+            >
+              <Group justify="space-between" align="center" mb="xl">
+                <div>
                   <Title
-                    order={3}
-                    mb="md"
+                    order={2}
                     style={{
                       color: '#374151',
                       fontFamily: 'Montserrat, sans-serif',
                       fontWeight: '700',
-                      fontSize: '1.2rem'
+                      fontSize: '1.5rem',
+                      marginBottom: '4px'
                     }}
                   >
-                    Alertas Recientes
+                    Alertas del Sistema
                   </Title>
-                  
-                  <Stack gap="sm">
-                    {recentAlerts.length > 0 ? (
-                      recentAlerts.map((alert, index) => (
-                        <Paper
-                          key={index}
-                          p="md"
-                          radius="md"
-                          style={{
-                            backgroundColor: '#fef2f2',
-                            border: '1px solid #fecaca'
-                          }}
-                        >
-                          <Text
-                            size="xs"
-                            style={{
-                              color: '#6b7280',
-                              fontFamily: 'Montserrat, sans-serif',
-                              fontWeight: '500',
-                              marginBottom: '4px'
-                            }}
-                          >
-                            {alert.timestamp}
-                          </Text>
-                          <Text
-                            size="sm"
-                            style={{
-                              color: '#dc2626',
-                              fontFamily: 'Montserrat, sans-serif',
-                              fontWeight: '600'
-                            }}
-                          >
-                            {alert.message}
-                          </Text>
-                        </Paper>
-                      ))
-                    ) : (
-                      <Alert icon={<IconAlertCircle size={18} />} color="blue">
-                        <Text size="sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                          No hay alertas recientes. El sistema está monitoreando...
-                        </Text>
-                      </Alert>
-                    )}
-                  </Stack>
-
                   <Text
-                    size="xs"
-                    mt="md"
+                    size="sm"
                     style={{
                       color: '#6b7280',
                       fontFamily: 'Montserrat, sans-serif',
-                      textAlign: 'center'
+                      fontWeight: '500'
                     }}
                   >
-                    Actualización automática cada 5 segundos
+                    Detecciones de seguridad y notificaciones 
                   </Text>
-                </Paper>
-              </Grid.Col>
-            </Grid>
+                </div>
+                <Button
+                  leftSection={<IconRefresh size={18} />}
+                  variant="light"
+                  color="orange"
+                  onClick={handleRefresh}
+                  loading={loading}
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: '600' }}
+                >
+                  Actualizar
+                </Button>
+              </Group>
+
+              {loading ? (
+                <Box style={{ textAlign: 'center', padding: '60px' }}>
+                  <Loader size="xl" color="orange" />
+                  <Text mt="lg" style={{ fontFamily: 'Montserrat, sans-serif', color: '#6b7280' }}>
+                    Cargando historial de notificaciones...
+                  </Text>
+                </Box>
+              ) : notificationHistory.length === 0 ? (
+                <Alert
+                  icon={<IconBell size={24} />}
+                  title="Sin notificaciones"
+                  color="gray"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+                  styles={{
+                    title: { fontSize: '1.1rem', fontWeight: 600 },
+                    message: { fontSize: '0.95rem' }
+                  }}
+                >
+                  <Text size="sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                    No hay notificaciones registradas en el sistema. Las alertas aparecerán aquí cuando se detecten situaciones de riesgo como trabajadores sin casco o sin guantes.
+                  </Text>
+                </Alert>
+              ) : (
+                <Box
+                  style={{
+                    maxHeight: 'calc(100vh - 420px)',
+                    minHeight: '400px',
+                    overflowY: 'auto',
+                    paddingRight: '8px'
+                  }}
+                >
+                  <Stack gap="md">
+                    {notificationHistory.map((log) => {
+                      const style = getNotificationStyle(log);
+                      return (
+                        <Paper
+                          key={log.id}
+                          p="lg"
+                          radius="md"
+                          style={{
+                            backgroundColor: style.bg,
+                            border: `1px solid ${style.border}`,
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <Group align="flex-start" gap="md">
+                            <Box
+                              style={{
+                                width: 48,
+                                height: 48,
+                                backgroundColor: style.icon,
+                                borderRadius: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                boxShadow: `0 4px 12px ${style.icon}40`
+                              }}
+                            >
+                              {getSourceIcon(log.source)}
+                            </Box>
+                            <Box style={{ flex: 1, minWidth: 0 }}>
+                              <Group gap="xs" mb="xs">
+                                <Badge 
+                                  size="sm" 
+                                  color={style.badgeColor}
+                                  variant="light"
+                                  style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: '600' }}
+                                >
+                                  {log.level}
+                                </Badge>
+                                <Badge 
+                                  size="sm" 
+                                  color="gray"
+                                  variant="outline"
+                                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+                                >
+                                  {getSourceLabel(log.source)}
+                                </Badge>
+                              </Group>
+                              <Text
+                                size="md"
+                                style={{
+                                  fontFamily: 'Montserrat, sans-serif',
+                                  fontWeight: '600',
+                                  color: '#374151',
+                                  marginBottom: '8px',
+                                  whiteSpace: 'pre-wrap',
+                                  wordBreak: 'break-word',
+                                  lineHeight: 1.5
+                                }}
+                              >
+                                {log.message}
+                              </Text>
+                              <Group gap="xs" align="center">
+                                <IconClock size={16} color="#6b7280" />
+                                <Text
+                                  size="sm"
+                                  style={{
+                                    fontFamily: 'Montserrat, sans-serif',
+                                    fontWeight: '500',
+                                    color: '#6b7280'
+                                  }}
+                                >
+                                  {log.timestamp}
+                                </Text>
+                              </Group>
+                            </Box>
+                          </Group>
+                        </Paper>
+                      );
+                    })}
+                  </Stack>
+                </Box>
+              )}
+            </Paper>
           </Container>
         </AppShell.Main>
       </AppShell>
     </>
   );
 }
-
-
-
-
 

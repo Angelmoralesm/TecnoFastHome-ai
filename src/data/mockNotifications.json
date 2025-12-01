@@ -1,0 +1,74 @@
+{
+  "notifications": [
+    {
+      "id": "mock-001",
+      "timestamp": "30-11-2024, 2:32:15 p. m.",
+      "source": "DETECTOR_EPP",
+      "level": "ALERTA",
+      "message": "Detección EPP: Persona sin casco detectada (0.94)"
+    },
+    {
+      "id": "mock-002",
+      "timestamp": "30-11-2024, 1:45:22 p. m.",
+      "source": "DETECTOR_EPP",
+      "level": "ALERTA",
+      "message": "Detección EPP: Persona sin guantes detectada (0.87)"
+    },
+    {
+      "id": "mock-003",
+      "timestamp": "30-11-2024, 12:18:05 p. m.",
+      "source": "DEMO_TEST",
+      "level": "INFO",
+      "message": "Prueba de conexión: El sistema de visión está vivo."
+    },
+    {
+      "id": "mock-004",
+      "timestamp": "30-11-2024, 11:22:33 a. m.",
+      "source": "DETECTOR_EPP",
+      "level": "ALERTA",
+      "message": "Detección EPP: Múltiples personas sin EPP (3 detectadas)"
+    },
+    {
+      "id": "mock-005",
+      "timestamp": "30-11-2024, 10:05:47 a. m.",
+      "source": "DETECTOR_FUEGO",
+      "level": "PELIGRO",
+      "message": "Fuego detectado (Conf: 0.96)"
+    },
+    {
+      "id": "mock-006",
+      "timestamp": "29-11-2024, 4:42:11 p. m.",
+      "source": "DETECTOR_EPP",
+      "level": "ALERTA",
+      "message": "Detección EPP: Persona sin guantes en zona de químicos (0.93)"
+    },
+    {
+      "id": "mock-007",
+      "timestamp": "29-11-2024, 3:30:00 p. m.",
+      "source": "SISTEMA",
+      "level": "INFO",
+      "message": "Sistema iniciado correctamente. Monitor-IA activo."
+    },
+    {
+      "id": "mock-008",
+      "timestamp": "29-11-2024, 2:15:28 p. m.",
+      "source": "DETECTOR_EPP",
+      "level": "ALERTA",
+      "message": "Detección EPP: Persona sin casco cerca de maquinaria (0.88)"
+    },
+    {
+      "id": "mock-009",
+      "timestamp": "29-11-2024, 11:08:55 a. m.",
+      "source": "DETECTOR_FUEGO",
+      "level": "PELIGRO",
+      "message": "Humo detectado en zona de almacén (Conf: 0.72)"
+    },
+    {
+      "id": "mock-010",
+      "timestamp": "28-11-2024, 9:22:14 a. m.",
+      "source": "DEMO_TEST",
+      "level": "INFO",
+      "message": "Prueba de conexión: Verificación de conectividad exitosa."
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "cameras": [
+    {
+      "id": "cam-001",
+      "name": "Entrada Principal",
+      "rtsp_url": "rtsp://admin:admin123@192.168.1.100:554/stream1",
+      "location": "Acceso Norte",
+      "status": "online",
+      "model": "epp",
+      "config": {
+        "conf_persona": 0.7,
+        "conf_casco": 0.8,
+        "conf_guantes": 0.75
+      }
+    },
+    {
+      "id": "cam-002",
+      "name": "Zona Industrial",
+      "rtsp_url": "rtsp://admin:admin123@192.168.1.101:554/stream1",
+      "location": "Planta de Producción",
+      "status": "online",
+      "model": "persona",
+      "config": {
+        "conf_persona": 0.65
+      }
+    },
+    {
+      "id": "cam-003",
+      "name": "Estacionamiento",
+      "rtsp_url": "rtsp://admin:admin123@192.168.1.102:554/stream1",
+      "location": "Parking Subterráneo",
+      "status": "offline",
+      "model": "patentes",
+      "config": {
+        "patentes_registradas": ["ABCD12", "WXYZ99", "BCDF45"]
+      }
+    },
+    {
+      "id": "cam-004",
+      "name": "Recepción",
+      "rtsp_url": "rtsp://admin:admin123@192.168.1.103:554/stream1",
+      "location": "Edificio Principal",
+      "status": "online",
+      "model": "facial",
+      "config": {
+        "usuarios_autorizados": ["usr-001", "usr-002", "usr-003"]
+      }
+    },
+    {
+      "id": "cam-005",
+      "name": "Bodega Químicos",
+      "rtsp_url": "rtsp://admin:admin123@192.168.1.104:554/stream1",
+      "location": "Sector B - Almacén",
+      "status": "online",
+      "model": "incendio",
+      "config": {
+        "conf_incendio": 0.85
+      }
+    }
+  ],
+  "registeredUsers": [
+    {
+      "id": "usr-001",
+      "name": "Juan Pérez",
+      "rut": "12.345.678-9",
+      "department": "Operaciones",
+      "photoUrl": "/avatars/user1.jpg",
+      "registeredAt": "2024-10-15T10:30:00.000Z"
+    },
+    {
+      "id": "usr-002",
+      "name": "María González",
+      "rut": "11.222.333-4",
+      "department": "Administración",
+      "photoUrl": "/avatars/user2.jpg",
+      "registeredAt": "2024-10-20T14:15:00.000Z"
+    },
+    {
+      "id": "usr-003",
+      "name": "Carlos Rodríguez",
+      "rut": "15.666.777-8",
+      "department": "Seguridad",
+      "photoUrl": "/avatars/user3.jpg",
+      "registeredAt": "2024-11-01T09:00:00.000Z"
+    },
+    {
+      "id": "usr-004",
+      "name": "Ana Martínez",
+      "rut": "14.555.666-K",
+      "department": "Recursos Humanos",
+      "photoUrl": "/avatars/user4.jpg",
+      "registeredAt": "2024-11-10T11:45:00.000Z"
+    }
+  ],
+  "registeredPlates": [
+    {
+      "id": "plate-001",
+      "plate": "ABCD12",
+      "owner": "Juan Pérez",
+      "vehicleType": "Automóvil",
+      "brand": "Toyota Corolla",
+      "color": "Blanco",
+      "registeredAt": "2024-10-15T10:30:00.000Z"
+    },
+    {
+      "id": "plate-002",
+      "plate": "WXYZ99",
+      "owner": "María González",
+      "vehicleType": "Camioneta",
+      "brand": "Ford Ranger",
+      "color": "Negro",
+      "registeredAt": "2024-10-20T14:15:00.000Z"
+    },
+    {
+      "id": "plate-003",
+      "plate": "BCDF45",
+      "owner": "Carlos Rodríguez",
+      "vehicleType": "Automóvil",
+      "brand": "Hyundai Accent",
+      "color": "Gris",
+      "registeredAt": "2024-11-01T09:00:00.000Z"
+    },
+    {
+      "id": "plate-004",
+      "plate": "JKLM78",
+      "owner": "Ana Martínez",
+      "vehicleType": "SUV",
+      "brand": "Kia Sportage",
+      "color": "Rojo",
+      "registeredAt": "2024-11-10T11:45:00.000Z"
+    }
+  ],
+  "iaModels": [
+    {
+      "id": "epp",
+      "name": "Detección EPP",
+      "description": "Detecta equipos de protección personal (casco, guantes)",
+      "icon": "hardhat",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "persona",
+      "name": "Detección de Personas",
+      "description": "Detecta presencia de personas en el área",
+      "icon": "user",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "facial",
+      "name": "Reconocimiento Facial",
+      "description": "Identifica personas registradas en el sistema",
+      "icon": "face",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "patentes",
+      "name": "Detección de Patentes",
+      "description": "Lee y verifica patentes de vehículos",
+      "icon": "car",
+      "color": "#10b981"
+    },
+    {
+      "id": "incendio",
+      "name": "Detección de Incendios",
+      "description": "Detecta fuego y humo en tiempo real",
+      "icon": "fire",
+      "color": "#ef4444"
+    }
+  ]
+}

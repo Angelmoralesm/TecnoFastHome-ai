@@ -30,6 +30,17 @@ export interface WhatsAppResponse {
   warning?: string;
 }
 
+export interface LogEntry {
+  id: string;
+  timestamp: string;
+  source: string;
+  level: 'ALERTA' | 'INFO' | 'PELIGRO' | string;
+  message: string;
+}
+
+// URL específica para los logs (puede ser diferente del API principal)
+const LOGS_API_URL = 'https://lancaster-enough-base-raleigh.trycloudflare.com';
+
 /**
  * Obtiene la configuración actual de la IA
  */
@@ -120,21 +131,28 @@ export async function sendWhatsAppNotification(
 }
 
 /**
- * Obtiene los logs/alertas de la IA
+ * Obtiene los logs/alertas de la IA desde el endpoint de logs
  */
-export async function getMonitorIaLogs(): Promise<Array<{ timestamp: string; message: string }>> {
-  const response = await fetch(`${MONITOR_IA_API_URL}/api/logs`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+export async function getMonitorIaLogs(): Promise<LogEntry[]> {
+  try {
+    const response = await fetch(`${LOGS_API_URL}/api/logs`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error(`Error obteniendo logs: ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Error obteniendo logs: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+      throw new Error('No se puede conectar con el servidor de logs. Verifica la conexión.');
+    }
+    throw error;
   }
-
-  return await response.json();
 }
 
 /**
